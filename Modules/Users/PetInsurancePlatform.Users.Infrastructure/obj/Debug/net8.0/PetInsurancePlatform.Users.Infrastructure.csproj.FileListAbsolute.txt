@@ -1,0 +1,11 @@
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Infrastructure\bin\Debug\net8.0\PetInsurancePlatform.Users.Infrastructure.deps.json
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Infrastructure\bin\Debug\net8.0\PetInsurancePlatform.Users.Infrastructure.dll
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Infrastructure\bin\Debug\net8.0\PetInsurancePlatform.Users.Infrastructure.pdb
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Infrastructure\obj\Debug\net8.0\PetInsurancePlatform.Users.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Infrastructure\obj\Debug\net8.0\PetInsurancePlatform.Users.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Infrastructure\obj\Debug\net8.0\PetInsurancePlatform.Users.Infrastructure.AssemblyInfo.cs
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Infrastructure\obj\Debug\net8.0\PetInsurancePlatform.Users.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Infrastructure\obj\Debug\net8.0\PetInsurancePlatform.Users.Infrastructure.dll
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Infrastructure\obj\Debug\net8.0\refint\PetInsurancePlatform.Users.Infrastructure.dll
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Infrastructure\obj\Debug\net8.0\PetInsurancePlatform.Users.Infrastructure.pdb
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Infrastructure\obj\Debug\net8.0\ref\PetInsurancePlatform.Users.Infrastructure.dll

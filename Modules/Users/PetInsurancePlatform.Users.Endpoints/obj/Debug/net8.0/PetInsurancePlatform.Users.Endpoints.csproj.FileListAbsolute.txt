@@ -1,0 +1,11 @@
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Endpoints\bin\Debug\net8.0\PetInsurancePlatform.Users.Endpoints.deps.json
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Endpoints\bin\Debug\net8.0\PetInsurancePlatform.Users.Endpoints.dll
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Endpoints\bin\Debug\net8.0\PetInsurancePlatform.Users.Endpoints.pdb
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Endpoints\obj\Debug\net8.0\PetInsurancePlatform.Users.Endpoints.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Endpoints\obj\Debug\net8.0\PetInsurancePlatform.Users.Endpoints.AssemblyInfoInputs.cache
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Endpoints\obj\Debug\net8.0\PetInsurancePlatform.Users.Endpoints.AssemblyInfo.cs
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Endpoints\obj\Debug\net8.0\PetInsurancePlatform.Users.Endpoints.csproj.CoreCompileInputs.cache
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Endpoints\obj\Debug\net8.0\PetInsurancePlatform.Users.Endpoints.dll
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Endpoints\obj\Debug\net8.0\refint\PetInsurancePlatform.Users.Endpoints.dll
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Endpoints\obj\Debug\net8.0\PetInsurancePlatform.Users.Endpoints.pdb
+C:\Users\Hamid\Pouria Gholami\Projects\PetInsurancePlatform\Modules\Users\PetInsurancePlatform.Users.Endpoints\obj\Debug\net8.0\ref\PetInsurancePlatform.Users.Endpoints.dll

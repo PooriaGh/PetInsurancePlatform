@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "App with Identity",
+    "Projects": [
+      {
+        "Path": "PetInsurancePlatform.App\\PetInsurancePlatform.App.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "PetInsurancePlatform.IdentityApp\\PetInsurancePlatform.IdentityApp.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

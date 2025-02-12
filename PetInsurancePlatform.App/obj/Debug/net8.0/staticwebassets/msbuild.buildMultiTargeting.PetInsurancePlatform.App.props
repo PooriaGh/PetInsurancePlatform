@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\PetInsurancePlatform.App.props" />
+</Project>
