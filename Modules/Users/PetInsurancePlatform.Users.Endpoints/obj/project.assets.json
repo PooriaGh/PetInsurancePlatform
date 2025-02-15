@@ -2812,7 +2812,6 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "FastEndpoints >= 5.34.0",
-      "PetInsurancePlatform.Users.Application >= 1.0.0",
       "PetInsurancePlatform.Users.Infrastructure >= 1.0.0"
     ]
   },
@@ -2848,9 +2847,6 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\Hamid\\Pouria Gholami\\Projects\\PetInsurancePlatform\\Modules\\Users\\PetInsurancePlatform.Users.Application\\PetInsurancePlatform.Users.Application.csproj": {
-              "projectPath": "C:\\Users\\Hamid\\Pouria Gholami\\Projects\\PetInsurancePlatform\\Modules\\Users\\PetInsurancePlatform.Users.Application\\PetInsurancePlatform.Users.Application.csproj"
-            },
             "C:\\Users\\Hamid\\Pouria Gholami\\Projects\\PetInsurancePlatform\\Modules\\Users\\PetInsurancePlatform.Users.Infrastructure\\PetInsurancePlatform.Users.Infrastructure.csproj": {
               "projectPath": "C:\\Users\\Hamid\\Pouria Gholami\\Projects\\PetInsurancePlatform\\Modules\\Users\\PetInsurancePlatform.Users.Infrastructure\\PetInsurancePlatform.Users.Infrastructure.csproj"
             }

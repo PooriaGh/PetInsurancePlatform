@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PetInsurancePlatform.IdentityApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aab9c63b087b9c23bd1af1e10890bff824f2592f")]
 [assembly: System.Reflection.AssemblyProductAttribute("PetInsurancePlatform.IdentityApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PetInsurancePlatform.IdentityApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

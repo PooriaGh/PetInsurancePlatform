@@ -173,9 +173,6 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\Hamid\\Pouria Gholami\\Projects\\PetInsurancePlatform\\Modules\\Users\\PetInsurancePlatform.Users.Application\\PetInsurancePlatform.Users.Application.csproj": {
-                "projectPath": "C:\\Users\\Hamid\\Pouria Gholami\\Projects\\PetInsurancePlatform\\Modules\\Users\\PetInsurancePlatform.Users.Application\\PetInsurancePlatform.Users.Application.csproj"
-              },
               "C:\\Users\\Hamid\\Pouria Gholami\\Projects\\PetInsurancePlatform\\Modules\\Users\\PetInsurancePlatform.Users.Infrastructure\\PetInsurancePlatform.Users.Infrastructure.csproj": {
                 "projectPath": "C:\\Users\\Hamid\\Pouria Gholami\\Projects\\PetInsurancePlatform\\Modules\\Users\\PetInsurancePlatform.Users.Infrastructure\\PetInsurancePlatform.Users.Infrastructure.csproj"
               }

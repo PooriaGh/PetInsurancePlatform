@@ -1,12 +1,71 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Hamid\\Pouria Gholami\\Projects\\PetInsurancePlatform\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{36E33134-66EE-42B2-B39E-5F21E9EDDAC2}|Modules\\Insurance\\PetInsurancePlatform.Insurance.Domain\\PetInsurancePlatform.Insurance.Domain.csproj|c:\\users\\hamid\\pouria gholami\\projects\\petinsuranceplatform\\modules\\insurance\\petinsuranceplatform.insurance.domain\\models\\insurancepolicy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{36E33134-66EE-42B2-B39E-5F21E9EDDAC2}|Modules\\Insurance\\PetInsurancePlatform.Insurance.Domain\\PetInsurancePlatform.Insurance.Domain.csproj|solutionrelative:modules\\insurance\\petinsuranceplatform.insurance.domain\\models\\insurancepolicy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{36E33134-66EE-42B2-B39E-5F21E9EDDAC2}|Modules\\Insurance\\PetInsurancePlatform.Insurance.Domain\\PetInsurancePlatform.Insurance.Domain.csproj|c:\\users\\hamid\\pouria gholami\\projects\\petinsuranceplatform\\modules\\insurance\\petinsuranceplatform.insurance.domain\\models\\insuranceplan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{36E33134-66EE-42B2-B39E-5F21E9EDDAC2}|Modules\\Insurance\\PetInsurancePlatform.Insurance.Domain\\PetInsurancePlatform.Insurance.Domain.csproj|solutionrelative:modules\\insurance\\petinsuranceplatform.insurance.domain\\models\\insuranceplan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{36E33134-66EE-42B2-B39E-5F21E9EDDAC2}|Modules\\Insurance\\PetInsurancePlatform.Insurance.Domain\\PetInsurancePlatform.Insurance.Domain.csproj|c:\\users\\hamid\\pouria gholami\\projects\\petinsuranceplatform\\modules\\insurance\\petinsuranceplatform.insurance.domain\\models\\pet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{36E33134-66EE-42B2-B39E-5F21E9EDDAC2}|Modules\\Insurance\\PetInsurancePlatform.Insurance.Domain\\PetInsurancePlatform.Insurance.Domain.csproj|solutionrelative:modules\\insurance\\petinsuranceplatform.insurance.domain\\models\\pet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "InsurancePlan.cs",
+              "DocumentMoniker": "C:\\Users\\Hamid\\Pouria Gholami\\Projects\\PetInsurancePlatform\\Modules\\Insurance\\PetInsurancePlatform.Insurance.Domain\\Models\\InsurancePlan.cs",
+              "RelativeDocumentMoniker": "Modules\\Insurance\\PetInsurancePlatform.Insurance.Domain\\Models\\InsurancePlan.cs",
+              "ToolTip": "C:\\Users\\Hamid\\Pouria Gholami\\Projects\\PetInsurancePlatform\\Modules\\Insurance\\PetInsurancePlatform.Insurance.Domain\\Models\\InsurancePlan.cs",
+              "RelativeToolTip": "Modules\\Insurance\\PetInsurancePlatform.Insurance.Domain\\Models\\InsurancePlan.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-15T14:37:32.754Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Pet.cs",
+              "DocumentMoniker": "C:\\Users\\Hamid\\Pouria Gholami\\Projects\\PetInsurancePlatform\\Modules\\Insurance\\PetInsurancePlatform.Insurance.Domain\\Models\\Pet.cs",
+              "RelativeDocumentMoniker": "Modules\\Insurance\\PetInsurancePlatform.Insurance.Domain\\Models\\Pet.cs",
+              "ToolTip": "C:\\Users\\Hamid\\Pouria Gholami\\Projects\\PetInsurancePlatform\\Modules\\Insurance\\PetInsurancePlatform.Insurance.Domain\\Models\\Pet.cs",
+              "RelativeToolTip": "Modules\\Insurance\\PetInsurancePlatform.Insurance.Domain\\Models\\Pet.cs",
+              "ViewState": "AgIAAFsAAAAAAAAAAAAQwHAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-15T14:36:52.821Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "InsurancePolicy.cs",
+              "DocumentMoniker": "C:\\Users\\Hamid\\Pouria Gholami\\Projects\\PetInsurancePlatform\\Modules\\Insurance\\PetInsurancePlatform.Insurance.Domain\\Models\\InsurancePolicy.cs",
+              "RelativeDocumentMoniker": "Modules\\Insurance\\PetInsurancePlatform.Insurance.Domain\\Models\\InsurancePolicy.cs",
+              "ToolTip": "C:\\Users\\Hamid\\Pouria Gholami\\Projects\\PetInsurancePlatform\\Modules\\Insurance\\PetInsurancePlatform.Insurance.Domain\\Models\\InsurancePolicy.cs",
+              "RelativeToolTip": "Modules\\Insurance\\PetInsurancePlatform.Insurance.Domain\\Models\\InsurancePolicy.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-15T14:29:58.907Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

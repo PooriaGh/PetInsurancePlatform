@@ -5,13 +5,9 @@ public abstract class Entity
     public Guid Id { get; private set; }
 
     // Used by EF Core
-    private Entity()
+    protected Entity()
     {
-    }
-
-    protected Entity(Guid id)
-    {
-        Id = id;
+        Id = Guid.NewGuid();
     }
 
     public override bool Equals(object? obj)
