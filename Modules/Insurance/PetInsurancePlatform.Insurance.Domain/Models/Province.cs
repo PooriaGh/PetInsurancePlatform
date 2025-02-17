@@ -5,12 +5,14 @@ namespace PetInsurancePlatform.Insurance.Domain.Models;
 
 public sealed class Province : Entity
 {
+    public static readonly Province None = new();
+
     // Used by EF Core
     private Province() : base()
     {
     }
 
-    public string Name { get; private set; } = null!;
+    public string Name { get; private set; } = string.Empty;
 
     public bool Deleted { get; private set; }
 

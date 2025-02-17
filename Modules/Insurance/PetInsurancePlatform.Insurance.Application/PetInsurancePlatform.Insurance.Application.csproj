@@ -10,4 +10,8 @@
     <ProjectReference Include="..\PetInsurancePlatform.Insurance.Domain\PetInsurancePlatform.Insurance.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="InsurancePlans\" />
+  </ItemGroup>
+
 </Project>

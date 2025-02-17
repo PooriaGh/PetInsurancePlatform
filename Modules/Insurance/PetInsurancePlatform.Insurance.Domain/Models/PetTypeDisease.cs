@@ -1,25 +1,27 @@
-﻿namespace PetInsurancePlatform.Insurance.Domain.Models;
+﻿using PetInsurancePlatform.SharedKernel.Abstractions;
 
-public sealed class PetTypeDisease
+namespace PetInsurancePlatform.Insurance.Domain.Models;
+
+public sealed class PetTypeDisease : Entity
 {
     // Used by EF Core
     private PetTypeDisease()
     {
     }
 
-    public PetType Type { get; private set; } = null!;
+    public PetType PetType { get; private set; } = PetType.None;
 
-    public Disease Disease { get; private set; } = null!;
+    public Disease Disease { get; private set; } = Disease.None;
 
     public DateTime CreatedAt { get; private set; }
 
     internal static PetTypeDisease Create(
-        PetType type,
+        PetType petType,
         Disease disease)
     {
         return new PetTypeDisease
         {
-            Type = type,
+            PetType = petType,
             Disease = disease,
             CreatedAt = DateTime.UtcNow,
         };

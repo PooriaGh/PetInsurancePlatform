@@ -1,4 +1,5 @@
-﻿using PetInsurancePlatform.Insurance.Domain.Enums;
+﻿using Ardalis.Result;
+using PetInsurancePlatform.Insurance.Domain.Enums;
 using PetInsurancePlatform.Insurance.Domain.ValueObjects;
 using PetInsurancePlatform.SharedKernel.Abstractions;
 
@@ -13,27 +14,46 @@ public sealed class Pet : Entity
     {
     }
 
-    public string Name { get; private set; } = null!;
+    public string Name { get; private set; } = string.Empty;
 
-    public string Breed { get; private set; } = null!;
+    public string Breed { get; private set; } = string.Empty;
 
     public Gender Gender { get; private set; }
 
     public DateOnly DateOfBirth { get; private set; }
 
-    public PetType Type { get; private set; } = null!;
+    public PetType PetType { get; private set; } = PetType.None;
 
-    public long Price { get; private set; }
+    public Money Price { get; private set; } = Money.Zero;
 
-    public City City { get; private set; } = null!;
+    public City City { get; private set; } = City.None;
 
-    public Address Address { get; private set; } = null!;
-
-    public Owner Owner { get; private set; } = null!;
+    public Address Address { get; private set; } = Address.None;
 
     public IReadOnlyCollection<AppearanceCharacteristic> Characteristics = [];
 
     public string? MicrochipCode { get; private set; }
+
+    public IReadOnlyCollection<Disease> Diseases { get; private set; } = [];
+    public bool HasDiseases => Diseases.Count != 0;
+
+    public Owner Owner { get; private set; } = Owner.None;
+
+    public TermsOfService TermsOfService { get; private set; } = TermsOfService.None;
+
+    public IReadOnlyCollection<StoredFile> BirthCertificatesPages { get; private set; } = [];
+
+    public StoredFile FrontView { get; private set; } = StoredFile.None;
+
+    public StoredFile RearView { get; private set; } = StoredFile.None;
+
+    public StoredFile RightSideView { get; private set; } = StoredFile.None;
+
+    public StoredFile LeftSideView { get; private set; } = StoredFile.None;
+
+    public StoredFile WalkingVideo { get; private set; } = StoredFile.None;
+
+    public StoredFile HealthCertificate { get; private set; } = StoredFile.None;
 
     public bool Deleted { get; private set; }
 
@@ -43,20 +63,37 @@ public sealed class Pet : Entity
 
     public DateTime? DeletedAt { get; private set; }
 
-    public static Pet Create(
+    public static Result<Pet> Create(
         string name,
         string breed,
         Gender gender,
         DateOnly dateOfBirth,
-        PetType type,
-        long price,
+        PetType petType,
+        Money price,
         City city,
         Address address,
-        Owner owner,
         List<AppearanceCharacteristic>? characteristics = null,
-        string? microchipCode = null)
+        string? microchipCode = null,
+        List<Disease>? diseases = null)
     {
         characteristics ??= [];
+        diseases ??= [];
+
+        var age = DateTime.UtcNow.Date.Year - dateOfBirth.Year;
+
+        if (petType.AgeRange.MinimumValue > age
+            || petType.AgeRange.MaximumValue < age)
+        {
+            return Result.Conflict("The pet's age is not in the acceptable range of insurance.");
+        }
+
+        foreach (var disease in diseases)
+        {
+            if (!petType.Diseases.Contains(disease))
+            {
+                return Result.Conflict("The diease of your pet is not covered by insurance.");
+            }
+        }
 
         return new Pet
         {
@@ -64,44 +101,190 @@ public sealed class Pet : Entity
             Breed = breed,
             Gender = gender,
             DateOfBirth = dateOfBirth,
-            Type = type,
+            PetType = petType,
             Price = price,
             City = city,
             Address = address,
-            Owner = owner,
             Characteristics = characteristics,
             MicrochipCode = microchipCode,
             CreatedAt = DateTime.UtcNow,
+            Diseases = diseases,
         };
     }
 
-    public void Update(
+    public Result AddOwner(Owner owner)
+    {
+        if (owner is null || owner == Owner.None)
+        {
+            return Result.Invalid(new ValidationError("Owner is required."));
+        }
+
+        Owner = owner;
+        UpdatedAt = DateTime.UtcNow;
+
+        return Result.Success();
+    }
+
+    public Result AcceptTermsOfService(TermsOfService termsOfService)
+    {
+        if (termsOfService is null || termsOfService == TermsOfService.None)
+        {
+            return Result.Invalid(new ValidationError("terms of service is required."));
+        }
+
+        if (TermsOfService != TermsOfService.None)
+        {
+            return Result.Invalid(new ValidationError("terms of service is already accepted."));
+        }
+
+        TermsOfService = termsOfService;
+        UpdatedAt = DateTime.UtcNow;
+
+        return Result.Success();
+    }
+
+    public Result AddImagesAndVideo(
+        List<StoredFile> birthCertificatesPages,
+        StoredFile frontView,
+        StoredFile rearView,
+        StoredFile rightSideView,
+        StoredFile leftSideView,
+        StoredFile walkingVideo)
+    {
+        if (birthCertificatesPages is null || birthCertificatesPages.Count == 0)
+        {
+            return Result.Invalid(new ValidationError("The images of birth certificates pages are required."));
+        }
+
+        if (frontView is null || frontView == StoredFile.None)
+        {
+            return Result.Invalid(new ValidationError("The image of front view is required."));
+        }
+
+        if (rearView is null || rearView == StoredFile.None)
+        {
+            return Result.Invalid(new ValidationError("The image of rear view is required."));
+        }
+
+        if (rightSideView is null || rightSideView == StoredFile.None)
+        {
+            return Result.Invalid(new ValidationError("The image of right side view is required."));
+        }
+
+        if (leftSideView is null || leftSideView == StoredFile.None)
+        {
+            return Result.Invalid(new ValidationError("The image of left side view is required."));
+        }
+
+        if (walkingVideo is null || walkingVideo == StoredFile.None)
+        {
+            return Result.Invalid(new ValidationError("The walking video is required."));
+        }
+
+        BirthCertificatesPages = birthCertificatesPages;
+        FrontView = frontView;
+        RearView = rearView;
+        RightSideView = rightSideView;
+        LeftSideView = leftSideView;
+        WalkingVideo = walkingVideo;
+        UpdatedAt = DateTime.UtcNow;
+
+        return Result.Success();
+    }
+
+    public Result AddHealthCertificate(StoredFile healthCertificate)
+    {
+        if (healthCertificate is null || healthCertificate == StoredFile.None)
+        {
+            return Result.Invalid(new ValidationError("Health certificate is required."));
+        }
+
+        HealthCertificate = healthCertificate;
+        UpdatedAt = DateTime.UtcNow;
+
+        return Result.Success();
+    }
+
+    public Result Update(
         string name,
         string breed,
         Gender gender,
         DateOnly dateOfBirth,
         PetType type,
-        long price,
+        Money price,
         City city,
         Address address,
         Owner owner,
+        TermsOfService termsOfService,
+        List<StoredFile> birthCertificatesPages,
+        StoredFile frontView,
+        StoredFile rearView,
+        StoredFile rightSideView,
+        StoredFile leftSideView,
+        StoredFile walkingVideo,
+        StoredFile healthCertificate,
         List<AppearanceCharacteristic>? characteristics = null,
-        string? microchipCode = null)
+        string? microchipCode = null,
+        List<Disease>? diseases = null)
     {
         characteristics ??= [];
+        diseases ??= [];
 
         Name = name;
         Breed = breed;
         Gender = gender;
         DateOfBirth = dateOfBirth;
-        Type = type;
+        PetType = type;
         Price = price;
         City = city;
         Address = address;
-        Owner = owner;
         Characteristics = characteristics;
         MicrochipCode = microchipCode;
+        Diseases = diseases;
         UpdatedAt = DateTime.UtcNow;
+
+        var result = AddOwner(owner);
+
+        if (result.IsError())
+        {
+            return result;
+        }
+
+        result = AcceptTermsOfService(termsOfService);
+
+        if (result.IsError())
+        {
+            return result;
+        }
+
+        result = AcceptTermsOfService(termsOfService);
+
+        if (result.IsError())
+        {
+            return result;
+        }
+
+        result = AddImagesAndVideo(
+            birthCertificatesPages,
+            frontView,
+            rearView,
+            rightSideView,
+            leftSideView,
+            walkingVideo);
+
+        if (result.IsError())
+        {
+            return result;
+        }
+
+        result = AddHealthCertificate(healthCertificate);
+
+        if (result.IsError())
+        {
+            return result;
+        }
+
+        return Result.Success();
     }
 
     public void Delete()

@@ -4,6 +4,8 @@ namespace PetInsurancePlatform.Insurance.Domain.Models;
 
 public sealed class TermsOfService : Entity
 {
+    public static readonly TermsOfService None = new();
+
     // Used by EF Core
     private TermsOfService()
     {
@@ -22,13 +24,5 @@ public sealed class TermsOfService : Entity
             Text = text,
             Version = version,
         };
-    }
-
-    public void Update(
-        string text,
-        int version)
-    {
-        Text = text;
-        Version = version;
     }
 }

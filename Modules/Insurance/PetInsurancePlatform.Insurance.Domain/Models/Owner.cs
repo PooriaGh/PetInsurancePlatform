@@ -4,6 +4,8 @@ namespace PetInsurancePlatform.Insurance.Domain.Models;
 
 public sealed class Owner : Entity
 {
+    public static readonly Owner None = new();
+
     // Used by EF Core
     private Owner() : base()
     {

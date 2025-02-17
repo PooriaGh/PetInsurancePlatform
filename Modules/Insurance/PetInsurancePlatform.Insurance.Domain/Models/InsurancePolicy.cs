@@ -1,4 +1,7 @@
-﻿using PetInsurancePlatform.SharedKernel.Abstractions;
+﻿using Ardalis.Result;
+using PetInsurancePlatform.Insurance.Domain.Enums;
+using PetInsurancePlatform.Insurance.Domain.ValueObjects;
+using PetInsurancePlatform.SharedKernel.Abstractions;
 
 namespace PetInsurancePlatform.Insurance.Domain.Models;
 
@@ -9,22 +12,72 @@ public sealed class InsurancePolicy : Entity
     {
     }
 
+    public string Code { get; set; } = string.Empty;
+
     public Pet Pet { get; private set; } = Pet.None;
 
     public InsurancePlan Plan { get; private set; } = InsurancePlan.None;
 
+    public Payment Payment { get; private set; } = Payment.None;
+
+    private InsurancePolicyStatus _status;
+    public InsurancePolicyStatus Status
+    {
+        get => ExpiredAt.HasValue && DateTime.Compare(ExpiredAt.Value, DateTime.UtcNow) > 0
+            ? InsurancePolicyStatus.Expired
+            : _status;
+        private set => _status = value;
+    }
+
+    public DateTime CreatedAt { get; private set; }
+
+    public DateTime? PaidAt { get; private set; }
 
     public DateTime? IssuedAt { get; private set; }
 
     public DateTime? ExpiredAt { get; private set; }
 
-    public static InsurancePolicy Issue(Pet pet, int policyPeriodsInDays)
+    internal static Result<InsurancePolicy> Create(
+        Pet pet,
+        InsurancePlan plan)
     {
+        if (pet is null || pet == Pet.None)
+        {
+            return Result.Invalid(new ValidationError("The pet is required."));
+        }
+
+        if (plan is null || plan == InsurancePlan.None)
+        {
+            return Result.Invalid(new ValidationError("The insurance plan is required."));
+        }
+
         return new InsurancePolicy
         {
+            Code = Guid.NewGuid().ToString("N"),
             Pet = pet,
-            IssuedAt = DateTime.UtcNow,
-            ExpiredAt = DateTime.UtcNow.AddDays(policyPeriodsInDays),
+            Plan = plan,
+            Status = InsurancePolicyStatus.PaymentPending,
+            CreatedAt = DateTime.UtcNow,
         };
+    }
+
+    internal Result Pay(Payment payment)
+    {
+        if (payment is null || payment == Payment.None)
+        {
+            return Result.Invalid(new ValidationError("The payment of plan is required."));
+        }
+
+        Status = InsurancePolicyStatus.HealthCertificatePending;
+        PaidAt = DateTime.UtcNow;
+
+        return Result.Success();
+    }
+
+    internal void Issue()
+    {
+        Status = InsurancePolicyStatus.Active;
+        IssuedAt = DateTime.UtcNow;
+        ExpiredAt = DateTime.UtcNow.AddYears(1);
     }
 }
