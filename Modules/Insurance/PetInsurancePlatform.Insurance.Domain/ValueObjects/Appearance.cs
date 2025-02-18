@@ -3,18 +3,18 @@ using PetInsurancePlatform.SharedKernel.Abstractions;
 
 namespace PetInsurancePlatform.Insurance.Domain.ValueObjects;
 
-public sealed class AppearanceCharacteristic : ValueObject
+public sealed class Appearance : ValueObject
 {
     // Used by EF Core
-    private AppearanceCharacteristic()
+    private Appearance()
     {
     }
 
     public string Value { get; private set; } = string.Empty;
 
-    public static Result<AppearanceCharacteristic> Create(string value)
+    public static Result<Appearance> Create(string value)
     {
-        return new AppearanceCharacteristic
+        return new Appearance
         {
             Value = value,
         };

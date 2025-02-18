@@ -14,14 +14,14 @@ public sealed class Disease : Entity
     }
 
     public string Name { get; private set; } = string.Empty;
+
     public bool Accepted { get; private set; }
 
     private readonly List<PetTypeDisease> _petTypeDiseases = [];
     public IReadOnlyCollection<PetTypeDisease> PetTypeDiseases => _petTypeDiseases.AsReadOnly();
-    public IReadOnlyCollection<PetType> PetTypes => _petTypeDiseases
+    public IReadOnlyCollection<PetType> PetTypes => [.. _petTypeDiseases
         .OrderBy(atd => atd.CreatedAt)
-        .Select(d => d.PetType)
-        .ToList();
+        .Select(d => d.PetType)];
 
     public DateTime CreatedAt { get; private set; }
 

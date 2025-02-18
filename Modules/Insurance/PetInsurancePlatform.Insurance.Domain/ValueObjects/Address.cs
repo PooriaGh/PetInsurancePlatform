@@ -7,6 +7,14 @@ public sealed class Address : ValueObject
 {
     public static readonly Address None = new();
 
+    public static readonly ValidationError EmptyDistrict = new("The district of address is required.");
+
+    public static readonly ValidationError InvalidDistrict = new("The district of address must have a positive value.");
+
+    public static readonly ValidationError EmptyStreet = new("The street of address is required.");
+
+    public static readonly ValidationError InvalidPostalCode = new("The postal code of address must have a positive value.");
+
     // Used by EF Core
     private Address()
     {
@@ -20,28 +28,33 @@ public sealed class Address : ValueObject
 
     public string? PlateNumber { get; private set; }
 
-    public string? PostalCode { get; private set; }
+    public long PostalCode { get; private set; }
 
     public static Result<Address> Create(
         int district,
         string street,
-        string? alley = null,
-        string? plateNumber = null,
-        string? postalCode = null)
+        string? alley,
+        string? plateNumber,
+        long postalCode)
     {
         if (district == 0)
         {
-            return Result.Invalid(new ValidationError("The district of address is required."));
+            return Result.Invalid(EmptyDistrict);
         }
 
         if (district < 0)
         {
-            return Result.Invalid(new ValidationError("The district of address must be a non-negative value."));
+            return Result.Invalid(InvalidDistrict);
         }
 
         if (string.IsNullOrWhiteSpace(street))
         {
-            return Result.Invalid(new ValidationError("The street of address is required."));
+            return Result.Invalid(EmptyStreet);
+        }
+
+        if (district < 0)
+        {
+            return Result.Invalid(InvalidPostalCode);
         }
 
         return new Address
@@ -60,6 +73,6 @@ public sealed class Address : ValueObject
         yield return Street;
         yield return Alley ?? string.Empty;
         yield return PlateNumber ?? string.Empty;
-        yield return PostalCode ?? string.Empty;
+        yield return PostalCode;
     }
 }

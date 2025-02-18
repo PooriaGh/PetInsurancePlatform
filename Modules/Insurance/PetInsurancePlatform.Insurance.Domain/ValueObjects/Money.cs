@@ -14,7 +14,7 @@ public sealed class Money : ValueObject
 
     public long Value { get; private set; }
 
-    public static Result<Money> Create(int value)
+    public static Result<Money> Create(long value)
     {
         if (value == 0)
         {

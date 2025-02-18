@@ -11,7 +11,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="InsurancePlans\" />
+    <Folder Include="InsurancePlans\Queries\" />
+    <Folder Include="ServiceInstallers\" />
+    <Folder Include="Pets\Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
   </ItemGroup>
 
 </Project>

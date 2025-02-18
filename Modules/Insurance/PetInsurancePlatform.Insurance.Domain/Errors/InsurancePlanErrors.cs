@@ -7,6 +7,23 @@ public sealed class InsurancePlanErrors
 {
     public static readonly ValidationError EmptyName = new("The name of insurance plan is required.");
 
+    public static readonly string NotCreated = "The insurance plan isn't created.";
+
+    public static string NotFound(Guid id)
+    {
+        return $"The insurance plan with ID = {id} isn't found.";
+    }
+
+    public static string NotUpdated(Guid id)
+    {
+        return $"The insurance plan with ID = {id} isn't updated.";
+    }
+
+    public static string NotRemoved(Guid id)
+    {
+        return $"The insurance plan with ID = {id} isn't removed.";
+    }
+
     public static string DuplicateCoverage(string name)
     {
         return $"The plan already has the coverage with name = {name}.";

@@ -31,16 +31,14 @@ public sealed class Pet : Entity
 
     public Address Address { get; private set; } = Address.None;
 
-    public IReadOnlyCollection<AppearanceCharacteristic> Characteristics = [];
+    public IReadOnlyCollection<Appearance> Appearances { get; private set; } = [];
 
-    public string? MicrochipCode { get; private set; }
+    public string MicrochipCode { get; private set; } = string.Empty;
 
     public IReadOnlyCollection<Disease> Diseases { get; private set; } = [];
     public bool HasDiseases => Diseases.Count != 0;
 
     public Owner Owner { get; private set; } = Owner.None;
-
-    public TermsOfService TermsOfService { get; private set; } = TermsOfService.None;
 
     public IReadOnlyCollection<StoredFile> BirthCertificatesPages { get; private set; } = [];
 
@@ -73,11 +71,11 @@ public sealed class Pet : Entity
         Money price,
         City city,
         Address address,
-        List<AppearanceCharacteristic>? characteristics = null,
-        string? microchipCode = null,
-        List<Disease>? diseases = null)
+        List<Appearance> appearances,
+        string microchipCode,
+        List<Disease> diseases)
     {
-        characteristics ??= [];
+        appearances ??= [];
         diseases ??= [];
 
         var age = DateTime.UtcNow.Date.Year - dateOfBirth.Year;
@@ -106,7 +104,7 @@ public sealed class Pet : Entity
             Price = price,
             City = city,
             Address = address,
-            Characteristics = characteristics,
+            Appearances = appearances,
             MicrochipCode = microchipCode,
             CreatedAt = DateTime.UtcNow,
             Diseases = diseases,
@@ -121,24 +119,6 @@ public sealed class Pet : Entity
         }
 
         Owner = owner;
-        UpdatedAt = DateTime.UtcNow;
-
-        return Result.Success();
-    }
-
-    public Result AcceptTermsOfService(TermsOfService termsOfService)
-    {
-        if (termsOfService is null || termsOfService == TermsOfService.None)
-        {
-            return Result.Invalid(PetErrors.EmptyTermsOfService);
-        }
-
-        if (TermsOfService != TermsOfService.None)
-        {
-            return Result.Invalid(PetErrors.DuplicateTermsOfService);
-        }
-
-        TermsOfService = termsOfService;
         UpdatedAt = DateTime.UtcNow;
 
         return Result.Success();
@@ -215,20 +195,19 @@ public sealed class Pet : Entity
         Money price,
         City city,
         Address address,
+        List<Appearance> appearances,
+        string microchipCode,
+        List<Disease> diseases,
         Owner owner,
-        TermsOfService termsOfService,
         List<StoredFile> birthCertificatesPages,
         StoredFile frontView,
         StoredFile rearView,
         StoredFile rightSideView,
         StoredFile leftSideView,
         StoredFile walkingVideo,
-        StoredFile healthCertificate,
-        List<AppearanceCharacteristic>? characteristics = null,
-        string? microchipCode = null,
-        List<Disease>? diseases = null)
+        StoredFile healthCertificate)
     {
-        characteristics ??= [];
+        appearances ??= [];
         diseases ??= [];
 
         Name = name;
@@ -239,28 +218,14 @@ public sealed class Pet : Entity
         Price = price;
         City = city;
         Address = address;
-        Characteristics = characteristics;
+        Appearances = appearances;
         MicrochipCode = microchipCode;
         Diseases = diseases;
         UpdatedAt = DateTime.UtcNow;
 
         var result = AddOwner(owner);
 
-        if (result.IsError())
-        {
-            return result;
-        }
-
-        result = AcceptTermsOfService(termsOfService);
-
-        if (result.IsError())
-        {
-            return result;
-        }
-
-        result = AcceptTermsOfService(termsOfService);
-
-        if (result.IsError())
+        if (!result.IsSuccess)
         {
             return result;
         }
@@ -273,14 +238,14 @@ public sealed class Pet : Entity
             leftSideView,
             walkingVideo);
 
-        if (result.IsError())
+        if (!result.IsSuccess)
         {
             return result;
         }
 
         result = AddHealthCertificate(healthCertificate);
 
-        if (result.IsError())
+        if (!result.IsSuccess)
         {
             return result;
         }

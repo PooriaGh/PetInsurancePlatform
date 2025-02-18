@@ -15,11 +15,13 @@ public sealed class InsurancePolicy : Entity
 
     public string Code { get; set; } = string.Empty;
 
-    public Pet Pet { get; private set; } = Pet.None;
-
     public InsurancePlan Plan { get; private set; } = InsurancePlan.None;
 
-    public Payment Payment { get; private set; } = Payment.None;
+    public Pet? Pet { get; private set; }
+
+    public Payment? Payment { get; private set; }
+
+    public TermsOfService? TermsOfService { get; private set; }
 
     private InsurancePolicyStatus _status;
     public InsurancePolicyStatus Status
@@ -32,21 +34,16 @@ public sealed class InsurancePolicy : Entity
 
     public DateTime CreatedAt { get; private set; }
 
+    public DateTime? AcceptedAt { get; private set; }
+
     public DateTime? PaidAt { get; private set; }
 
     public DateTime? IssuedAt { get; private set; }
 
     public DateTime? ExpiredAt { get; private set; }
 
-    internal static Result<InsurancePolicy> Create(
-        Pet pet,
-        InsurancePlan plan)
+    internal static Result<InsurancePolicy> Create(InsurancePlan plan)
     {
-        if (pet is null || pet == Pet.None)
-        {
-            return Result.Invalid(InsurancePolicyErrors.EmptyPet);
-        }
-
         if (plan is null || plan == InsurancePlan.None)
         {
             return Result.Invalid(InsurancePolicyErrors.EmptyInsurancePlan);
@@ -55,11 +52,40 @@ public sealed class InsurancePolicy : Entity
         return new InsurancePolicy
         {
             Code = Guid.NewGuid().ToString("N"),
-            Pet = pet,
             Plan = plan,
             Status = InsurancePolicyStatus.PaymentPending,
             CreatedAt = DateTime.UtcNow,
         };
+    }
+
+    internal Result AddPet(Pet pet)
+    {
+        if (pet is null || pet == Pet.None)
+        {
+            return Result.Invalid(InsurancePolicyErrors.EmptyPet);
+        }
+
+        Pet = pet;
+
+        return Result.Success();
+    }
+
+    internal Result AcceptTermsOfService(TermsOfService termsOfService)
+    {
+        if (termsOfService is null || termsOfService == TermsOfService.None)
+        {
+            return Result.Invalid(PetErrors.EmptyTermsOfService);
+        }
+
+        if (TermsOfService is null || TermsOfService != TermsOfService.None)
+        {
+            return Result.Invalid(PetErrors.DuplicateTermsOfService);
+        }
+
+        TermsOfService = termsOfService;
+        AcceptedAt = DateTime.UtcNow;
+
+        return Result.Success();
     }
 
     internal Result Pay(Payment payment)

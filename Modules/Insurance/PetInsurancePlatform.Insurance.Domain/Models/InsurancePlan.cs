@@ -83,21 +83,42 @@ public sealed class InsurancePlan : Entity
         return Result.Success();
     }
 
-    public Result CreatePolicy(Pet pet)
+    public Result<InsurancePolicy> CreatePolicy()
     {
-        if (_policies.Any(p => p.Pet == pet && p.Status == InsurancePolicyStatus.Active))
+        var result = InsurancePolicy.Create(this);
+
+        if (!result.IsSuccess)
+        {
+            return Result.Error(new ErrorList(result.Errors));
+        }
+
+        _policies.Add(result.Value);
+
+        return result.Value;
+    }
+
+    public Result AddPetToPolicy(
+        Pet pet,
+        InsurancePolicy policy)
+    {
+        if (_policies
+            .Where(p => p.Pet is not null)
+            .Any(p => p.Pet! == pet && p.Status == InsurancePolicyStatus.Active))
         {
             return Result.Conflict(InsurancePlanErrors.DuplicatePlan(Name));
         }
 
-        var result = InsurancePolicy.Create(pet, this);
-
-        if (result.IsError())
+        if (!_policies.Any(p => p == policy))
         {
-            return Result.Conflict(result.Errors.ToArray());
+            return Result.NotFound(InsurancePolicyErrors.NotFound(policy.Id));
         }
 
-        _policies.Add(result.Value);
+        var result = policy.AddPet(pet);
+
+        if (!result.IsSuccess)
+        {
+            return Result.Error(new ErrorList(result.Errors));
+        }
 
         return Result.Success();
     }
@@ -107,7 +128,8 @@ public sealed class InsurancePlan : Entity
         Payment payment)
     {
         var policy = _policies
-            .FirstOrDefault(p => p.Pet == pet && p.Status == InsurancePolicyStatus.PaymentPending);
+            .Where(p => p.Pet is not null)
+            .FirstOrDefault(p => p.Pet! == pet && p.Status == InsurancePolicyStatus.PaymentPending);
 
         if (policy is null)
         {
@@ -116,9 +138,9 @@ public sealed class InsurancePlan : Entity
 
         var result = policy.Pay(payment);
 
-        if (result.IsError())
+        if (!result.IsSuccess)
         {
-            return Result.Conflict(result.Errors.ToArray());
+            return Result.Error(new ErrorList(result.Errors));
         }
 
         return Result.Success();
@@ -127,7 +149,8 @@ public sealed class InsurancePlan : Entity
     public Result IssuePolicy(Pet pet)
     {
         var policy = _policies
-            .FirstOrDefault(p => p.Pet == pet && p.Status == InsurancePolicyStatus.HealthCertificatePending);
+            .Where(p => p.Pet is not null)
+            .FirstOrDefault(p => p.Pet! == pet && p.Status == InsurancePolicyStatus.HealthCertificatePending);
 
         if (policy is null)
         {

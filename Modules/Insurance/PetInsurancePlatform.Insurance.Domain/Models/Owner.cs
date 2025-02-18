@@ -24,7 +24,9 @@ public sealed class Owner : Entity
 
     public DateOnly DateOfBirth { get; private set; }
 
-    public City City { get; private set; } = null!;
+    public City City { get; private set; } = City.None;
+
+    public IReadOnlyCollection<Pet> Pets { get; } = [];
 
     public static Result<Owner> Create(
         string firstName,
