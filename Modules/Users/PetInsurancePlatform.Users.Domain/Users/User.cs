@@ -2,6 +2,6 @@
 
 namespace PetInsurancePlatform.Users.Domain.Users;
 
-public sealed class User(Guid id) : Entity(id)
+public sealed class User : Entity
 {
 }

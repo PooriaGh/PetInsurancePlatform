@@ -1,4 +1,6 @@
-﻿using PetInsurancePlatform.SharedKernel.Abstractions;
+﻿using Ardalis.Result;
+using PetInsurancePlatform.Insurance.Domain.Errors;
+using PetInsurancePlatform.SharedKernel.Abstractions;
 
 namespace PetInsurancePlatform.Insurance.Domain.Models;
 
@@ -25,10 +27,15 @@ public sealed class Disease : Entity
 
     public DateTime? UpdatedAt { get; private set; }
 
-    public static Disease Create(
+    public static Result<Disease> Create(
         string name,
         bool accepted)
     {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return Result.Invalid(DiseaseErrors.EmptyName);
+        }
+
         return new Disease
         {
             Name = name,
@@ -37,12 +44,19 @@ public sealed class Disease : Entity
         };
     }
 
-    public void Update(
+    public Result Update(
         string name,
         bool accepted)
     {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return Result.Invalid(DiseaseErrors.EmptyName);
+        }
+
         Name = name;
         Accepted = accepted;
         UpdatedAt = DateTime.UtcNow;
+
+        return Result.Success();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Ardalis.Result;
 using PetInsurancePlatform.Insurance.Domain.Enums;
+using PetInsurancePlatform.Insurance.Domain.Errors;
 using PetInsurancePlatform.Insurance.Domain.ValueObjects;
 using PetInsurancePlatform.SharedKernel.Abstractions;
 
@@ -35,6 +36,11 @@ public sealed class InsurancePlan : Entity
         bool vip,
         Money price)
     {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return Result.Invalid(InsurancePlanErrors.EmptyName);
+        }
+
         return new InsurancePlan
         {
             Name = name,
@@ -49,6 +55,11 @@ public sealed class InsurancePlan : Entity
        bool vip,
        Money price)
     {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return Result.Invalid(InsurancePlanErrors.EmptyName);
+        }
+
         Name = name;
         VIP = vip;
         Price = price;
@@ -63,7 +74,7 @@ public sealed class InsurancePlan : Entity
         {
             if (_coverages.Any(c => c == coverage))
             {
-                return Result.Conflict($"The plan already has the coverage with name = {coverage.Name}.");
+                return Result.Conflict(InsurancePlanErrors.DuplicateCoverage(coverage.Name));
             }
         }
 
@@ -76,7 +87,7 @@ public sealed class InsurancePlan : Entity
     {
         if (_policies.Any(p => p.Pet == pet && p.Status == InsurancePolicyStatus.Active))
         {
-            return Result.Conflict("The pet already has an active insurance policy of the current plan.");
+            return Result.Conflict(InsurancePlanErrors.DuplicatePlan(Name));
         }
 
         var result = InsurancePolicy.Create(pet, this);
@@ -100,7 +111,7 @@ public sealed class InsurancePlan : Entity
 
         if (policy is null)
         {
-            return Result.NotFound("There aren't any policies with status = PaymentPending for the current pet.");
+            return Result.NotFound(InsurancePolicyErrors.NotFoundPolicy(InsurancePolicyStatus.PaymentPending, pet.Name));
         }
 
         var result = policy.Pay(payment);
@@ -120,7 +131,7 @@ public sealed class InsurancePlan : Entity
 
         if (policy is null)
         {
-            return Result.NotFound("There aren't any policies with status = HealthCertificatePending for the current pet.");
+            return Result.NotFound(InsurancePolicyErrors.NotFoundPolicy(InsurancePolicyStatus.PaymentPending, pet.Name));
         }
 
         policy.Issue();

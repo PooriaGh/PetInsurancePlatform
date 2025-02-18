@@ -1,5 +1,6 @@
 ﻿using Ardalis.Result;
 using PetInsurancePlatform.Insurance.Domain.Enums;
+using PetInsurancePlatform.Insurance.Domain.Errors;
 using PetInsurancePlatform.Insurance.Domain.ValueObjects;
 using PetInsurancePlatform.SharedKernel.Abstractions;
 
@@ -43,12 +44,12 @@ public sealed class InsurancePolicy : Entity
     {
         if (pet is null || pet == Pet.None)
         {
-            return Result.Invalid(new ValidationError("The pet is required."));
+            return Result.Invalid(InsurancePolicyErrors.EmptyPet);
         }
 
         if (plan is null || plan == InsurancePlan.None)
         {
-            return Result.Invalid(new ValidationError("The insurance plan is required."));
+            return Result.Invalid(InsurancePolicyErrors.EmptyInsurancePlan);
         }
 
         return new InsurancePolicy
@@ -65,7 +66,7 @@ public sealed class InsurancePolicy : Entity
     {
         if (payment is null || payment == Payment.None)
         {
-            return Result.Invalid(new ValidationError("The payment of plan is required."));
+            return Result.Invalid(InsurancePolicyErrors.EmptyPayment);
         }
 
         Status = InsurancePolicyStatus.HealthCertificatePending;

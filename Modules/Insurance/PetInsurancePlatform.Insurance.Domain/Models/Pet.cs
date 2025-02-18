@@ -1,5 +1,6 @@
 ﻿using Ardalis.Result;
 using PetInsurancePlatform.Insurance.Domain.Enums;
+using PetInsurancePlatform.Insurance.Domain.Errors;
 using PetInsurancePlatform.Insurance.Domain.ValueObjects;
 using PetInsurancePlatform.SharedKernel.Abstractions;
 
@@ -84,14 +85,14 @@ public sealed class Pet : Entity
         if (petType.AgeRange.MinimumValue > age
             || petType.AgeRange.MaximumValue < age)
         {
-            return Result.Conflict("The pet's age is not in the acceptable range of insurance.");
+            return Result.Conflict(PetErrors.OutOfRangeAge(age));
         }
 
         foreach (var disease in diseases)
         {
             if (!petType.Diseases.Contains(disease))
             {
-                return Result.Conflict("The diease of your pet is not covered by insurance.");
+                return Result.Conflict(PetErrors.NotCoveredDisease(disease.Name));
             }
         }
 
@@ -116,7 +117,7 @@ public sealed class Pet : Entity
     {
         if (owner is null || owner == Owner.None)
         {
-            return Result.Invalid(new ValidationError("Owner is required."));
+            return Result.Invalid(PetErrors.EmptyOwner);
         }
 
         Owner = owner;
@@ -129,12 +130,12 @@ public sealed class Pet : Entity
     {
         if (termsOfService is null || termsOfService == TermsOfService.None)
         {
-            return Result.Invalid(new ValidationError("terms of service is required."));
+            return Result.Invalid(PetErrors.EmptyTermsOfService);
         }
 
         if (TermsOfService != TermsOfService.None)
         {
-            return Result.Invalid(new ValidationError("terms of service is already accepted."));
+            return Result.Invalid(PetErrors.DuplicateTermsOfService);
         }
 
         TermsOfService = termsOfService;
@@ -153,32 +154,32 @@ public sealed class Pet : Entity
     {
         if (birthCertificatesPages is null || birthCertificatesPages.Count == 0)
         {
-            return Result.Invalid(new ValidationError("The images of birth certificates pages are required."));
+            return Result.Invalid(PetErrors.EmptyBirthCertificatesPages);
         }
 
         if (frontView is null || frontView == StoredFile.None)
         {
-            return Result.Invalid(new ValidationError("The image of front view is required."));
+            return Result.Invalid(PetErrors.EmptyFrontView);
         }
 
         if (rearView is null || rearView == StoredFile.None)
         {
-            return Result.Invalid(new ValidationError("The image of rear view is required."));
+            return Result.Invalid(PetErrors.EmptyRearView);
         }
 
         if (rightSideView is null || rightSideView == StoredFile.None)
         {
-            return Result.Invalid(new ValidationError("The image of right side view is required."));
+            return Result.Invalid(PetErrors.EmptyRightSideView);
         }
 
         if (leftSideView is null || leftSideView == StoredFile.None)
         {
-            return Result.Invalid(new ValidationError("The image of left side view is required."));
+            return Result.Invalid(PetErrors.EmptyLeftSideOfView);
         }
 
         if (walkingVideo is null || walkingVideo == StoredFile.None)
         {
-            return Result.Invalid(new ValidationError("The walking video is required."));
+            return Result.Invalid(PetErrors.EmptyWalkingVideo);
         }
 
         BirthCertificatesPages = birthCertificatesPages;
@@ -196,7 +197,7 @@ public sealed class Pet : Entity
     {
         if (healthCertificate is null || healthCertificate == StoredFile.None)
         {
-            return Result.Invalid(new ValidationError("Health certificate is required."));
+            return Result.Invalid(PetErrors.EmptyHealthCertificate);
         }
 
         HealthCertificate = healthCertificate;

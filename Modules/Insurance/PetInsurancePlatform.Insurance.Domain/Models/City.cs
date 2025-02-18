@@ -1,4 +1,6 @@
-﻿using PetInsurancePlatform.SharedKernel.Abstractions;
+﻿using Ardalis.Result;
+using PetInsurancePlatform.Insurance.Domain.Errors;
+using PetInsurancePlatform.SharedKernel.Abstractions;
 
 namespace PetInsurancePlatform.Insurance.Domain.Models;
 
@@ -15,16 +17,28 @@ public sealed class City : Entity
 
     public Province Province { get; set; } = Province.None;
 
-    public static City Create(string name)
+    public static Result<City> Create(string name)
     {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return Result.Invalid(CityErrors.EmptyName);
+        }
+
         return new City
         {
             Name = name,
         };
     }
 
-    public void Update(string name)
+    public Result Update(string name)
     {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return Result.Invalid(CityErrors.EmptyName);
+        }
+
         Name = name;
+
+        return Result.Success();
     }
 }

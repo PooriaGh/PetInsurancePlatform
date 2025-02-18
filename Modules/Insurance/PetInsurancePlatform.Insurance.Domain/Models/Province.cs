@@ -1,4 +1,5 @@
 ﻿using Ardalis.Result;
+using PetInsurancePlatform.Insurance.Domain.Errors;
 using PetInsurancePlatform.SharedKernel.Abstractions;
 
 namespace PetInsurancePlatform.Insurance.Domain.Models;
@@ -20,24 +21,36 @@ public sealed class Province : Entity
 
     public IReadOnlyCollection<City> Cities => _cities.AsReadOnly();
 
-    public static Province Create(string name)
+    public static Result<Province> Create(string name)
     {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return Result.Invalid(ProvinceErrors.EmptyName);
+        }
+
         return new Province
         {
             Name = name,
         };
     }
 
-    public void Update(string name)
+    public Result Update(string name)
     {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return Result.Invalid(ProvinceErrors.EmptyName);
+        }
+
         Name = name;
+
+        return Result.Success();
     }
 
     public Result Remove()
     {
         if (_cities.Count != 0)
         {
-            return Result.Conflict($"The province has cities.");
+            return Result.Invalid(ProvinceErrors.NotRemovable);
         }
 
         Deleted = true;
@@ -49,7 +62,7 @@ public sealed class Province : Entity
     {
         if (_cities.Any(c => c == city))
         {
-            return Result.Conflict($"The city is already added to the province.");
+            return Result.Conflict(ProvinceErrors.DuplicateCity(city.Name));
         }
 
         _cities.Add(city);
@@ -61,7 +74,7 @@ public sealed class Province : Entity
     {
         if (!_cities.Any(c => c == city))
         {
-            return Result.NotFound($"The province doesn't have a city with Id = {city.Id}.");
+            return Result.NotFound(ProvinceErrors.NotFoundCity(city.Id));
         }
 
         _cities.Remove(city);

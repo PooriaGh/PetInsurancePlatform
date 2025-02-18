@@ -1,4 +1,5 @@
 ﻿using Ardalis.Result;
+using PetInsurancePlatform.Insurance.Domain.Errors;
 using PetInsurancePlatform.Insurance.Domain.ValueObjects;
 using PetInsurancePlatform.SharedKernel.Abstractions;
 
@@ -28,10 +29,15 @@ public sealed class PetType : Entity
     private readonly List<Pet> _pets = [];
     public IReadOnlyCollection<Pet> Pets => _pets.AsReadOnly();
 
-    public static PetType Create(
+    public static Result<PetType> Create(
         string name,
         AgeRange ageRange)
     {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return Result.Invalid(PetTypeErrors.EmptyName);
+        }
+
         return new PetType
         {
             Name = name,
@@ -41,9 +47,14 @@ public sealed class PetType : Entity
 
     public Result AddDisease(Disease disease)
     {
+        if (disease is null)
+        {
+            return Result.Invalid(PetTypeErrors.EmptyDisease);
+        }
+
         if (_petTypeDiseases.Any(atd => atd.Disease == disease))
         {
-            return Result.Conflict("The disease is already added to the pet type.");
+            return Result.Conflict(PetTypeErrors.DuplicateDisease(disease.Name));
         }
 
         _petTypeDiseases.Add(PetTypeDisease.Create(this, disease));
@@ -53,14 +64,19 @@ public sealed class PetType : Entity
 
     public Result RemoveDisease(Disease disease)
     {
-        var animalTypeDisease = _petTypeDiseases.FirstOrDefault(atd => atd.Disease == disease);
-
-        if (animalTypeDisease is null)
+        if (disease is null)
         {
-            return Result.NotFound($"The pet type doesn't have a disease with ID = {disease.Id}.");
+            return Result.Invalid(PetTypeErrors.EmptyDisease);
         }
 
-        _petTypeDiseases.Remove(animalTypeDisease);
+        var petTypeDisease = _petTypeDiseases.FirstOrDefault(atd => atd.Disease == disease);
+
+        if (petTypeDisease is null)
+        {
+            return Result.NotFound(PetTypeErrors.NotFoundDisease(disease.Id));
+        }
+
+        _petTypeDiseases.Remove(petTypeDisease);
 
         return Result.Success();
     }
