@@ -9,7 +9,7 @@ namespace PetInsurancePlatform.Insurance.Infrastructure.Data;
 
 internal sealed class InuranceDbContext : BaseDbContext, IInsuranceDbContext
 {
-    private const string DB_SCHEMA = "insurance";
+    public const string DB_SCHEMA = "insurance";
 
     public DbSet<PetType> PetTypes => Set<PetType>();
 
