@@ -1,4 +1,5 @@
 ﻿using Ardalis.Result;
+using FastEndpoints;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -8,13 +9,13 @@ using PetInsurancePlatform.SharedKernel.Messaging;
 
 namespace PetInsurancePlatform.Insurance.Application.InsurancePlans.Commands;
 
-public sealed class SelectInsurancePlanCommand(Guid insurancePlanId) : ICommand<Guid>
+public sealed class SelectInsurancePlanCommand(Guid insurancePlanId) : ICommandWithResult<Guid>
 {
     public Guid InsurancePlanId { get; set; } = insurancePlanId;
 
-    internal sealed class Validator : AbstractValidator<SelectInsurancePlanCommand>
+    internal sealed class RequestValidator : Validator<SelectInsurancePlanCommand>
     {
-        public Validator()
+        public RequestValidator()
         {
             RuleFor(req => req.InsurancePlanId)
                 .NotEmpty();
@@ -23,9 +24,9 @@ public sealed class SelectInsurancePlanCommand(Guid insurancePlanId) : ICommand<
 
     internal sealed class Handler(
         IInsuranceDbContext dbContext,
-        ILogger<Handler> logger) : ICommandHandler<SelectInsurancePlanCommand, Guid>
+        ILogger<Handler> logger) : ICommandWithResultHandler<SelectInsurancePlanCommand, Guid>
     {
-        public async Task<Result<Guid>> Handle(SelectInsurancePlanCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Guid>> ExecuteAsync(SelectInsurancePlanCommand request, CancellationToken cancellationToken)
         {
             var plan = await dbContext.InsurancePlans
                 .Include(pt => pt.Policies)

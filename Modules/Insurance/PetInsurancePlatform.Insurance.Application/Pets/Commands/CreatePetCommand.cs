@@ -1,4 +1,5 @@
 ﻿using Ardalis.Result;
+using FastEndpoints;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -11,13 +12,13 @@ using PetInsurancePlatform.SharedKernel.Messaging;
 
 namespace PetInsurancePlatform.Insurance.Application.Pets.Commands;
 
-public sealed class CreatePetCommand(PetRequestDto petRequest) : ICommand<Guid>
+public sealed class CreatePetCommand(PetRequestDto petRequest) : ICommandWithResult<Guid>
 {
     public PetRequestDto PetRequest { get; set; } = petRequest;
 
-    internal sealed class Validator : AbstractValidator<CreatePetCommand>
+    internal sealed class RequestValidator : Validator<CreatePetCommand>
     {
-        public Validator()
+        public RequestValidator()
         {
             RuleFor(req => req.PetRequest)
                 .NotEmpty();
@@ -56,9 +57,9 @@ public sealed class CreatePetCommand(PetRequestDto petRequest) : ICommand<Guid>
 
     internal sealed class Handler(
         IInsuranceDbContext dbContext,
-        ILogger<Handler> logger) : ICommandHandler<CreatePetCommand, Guid>
+        ILogger<Handler> logger) : ICommandWithResultHandler<CreatePetCommand, Guid>
     {
-        public async Task<Result<Guid>> Handle(CreatePetCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Guid>> ExecuteAsync(CreatePetCommand request, CancellationToken cancellationToken)
         {
             var petType = await dbContext.PetTypes
                 .Include(p => p.Diseases)

@@ -1,4 +1,5 @@
 ﻿using Ardalis.Result;
+using FastEndpoints;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -7,14 +8,13 @@ using PetInsurancePlatform.Insurance.Application.Dtos;
 using PetInsurancePlatform.Insurance.Domain.Errors;
 using PetInsurancePlatform.Insurance.Domain.Models;
 using PetInsurancePlatform.Insurance.Domain.ValueObjects;
-using PetInsurancePlatform.SharedKernel.Messaging;
 
 namespace PetInsurancePlatform.Insurance.Application.InsurancePlans.Commands;
 
 public sealed class AddPetCommand(
     Guid insurancePlanId,
     Guid insurancePolicyId,
-    PetRequestDto petRequest) : ICommand
+    PetRequestDto petRequest) : ICommand<Result>
 {
     public Guid InsurancePlanId { get; set; } = insurancePlanId;
 
@@ -22,9 +22,9 @@ public sealed class AddPetCommand(
 
     public PetRequestDto PetRequest { get; set; } = petRequest;
 
-    internal sealed class Validator : AbstractValidator<AddPetCommand>
+    internal sealed class RequestValidator : Validator<AddPetCommand>
     {
-        public Validator()
+        public RequestValidator()
         {
             RuleFor(req => req.InsurancePlanId)
                 .NotEmpty();
@@ -67,32 +67,30 @@ public sealed class AddPetCommand(
         }
     }
 
-    internal sealed class Handler(
+    public class AddPetCommandHandler(
         IInsuranceDbContext dbContext,
-        ILogger<Handler> logger) : ICommandHandler<AddPetCommand>
+        ILogger<AddPetCommandHandler> logger) : ICommandHandler<AddPetCommand, Result>
     {
-        public async Task<Result> Handle(AddPetCommand request, CancellationToken cancellationToken)
+        public async Task<Result> ExecuteAsync(AddPetCommand command, CancellationToken ct)
         {
             var plan = await dbContext.InsurancePlans
-                .Include(pt => pt.Policies.Where(p => p.Id == request.InsurancePolicyId))
-                .FirstOrDefaultAsync(pt => pt.Id == request.InsurancePlanId, cancellationToken);
+                .Include(pt => pt.Policies.Where(p => p.Id == command.InsurancePolicyId))
+                .FirstOrDefaultAsync(pt => pt.Id == command.InsurancePlanId, ct);
 
             if (plan is null)
             {
-                return Result.NotFound(InsurancePlanErrors.NotFound(request.InsurancePlanId));
+                return Result.NotFound(InsurancePlanErrors.NotFound(command.InsurancePlanId));
             }
 
             var policy = plan.Policies
-                .FirstOrDefault(p => p.Id == request.InsurancePolicyId);
+                .FirstOrDefault(p => p.Id == command.InsurancePolicyId);
 
             if (policy is null)
             {
-                return Result.NotFound(InsurancePolicyErrors.NotFound(request.InsurancePlanId));
+                return Result.NotFound(InsurancePolicyErrors.NotFound(command.InsurancePlanId));
             }
 
-            var pet = await CreatePetAsync(
-                request.PetRequest,
-                cancellationToken);
+            var pet = await CreatePetAsync(command.PetRequest, ct);
 
             if (!pet.IsSuccess)
             {
@@ -108,7 +106,7 @@ public sealed class AddPetCommand(
 
             try
             {
-                await dbContext.SaveChangesAsync(cancellationToken);
+                await dbContext.SaveChangesAsync(ct);
 
                 return Result.Success();
             }
@@ -132,8 +130,9 @@ public sealed class AddPetCommand(
             {
                 return Result.NotFound(PetTypeErrors.NotFound(petRequest.PetTypeId));
             }
+
             var city = await dbContext.Cities
-            .FirstOrDefaultAsync(pt => pt.Id == petRequest.CityId, cancellationToken);
+                .FirstOrDefaultAsync(pt => pt.Id == petRequest.CityId, cancellationToken);
 
             if (city is null)
             {

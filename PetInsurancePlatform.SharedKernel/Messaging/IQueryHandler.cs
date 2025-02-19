@@ -1,8 +1,10 @@
 ﻿using Ardalis.Result;
-using MediatR;
+using FastEndpoints;
 
 namespace PetInsurancePlatform.SharedKernel.Messaging;
 
-public interface IQueryHandler<TQuery, TResponse> : IRequestHandler<TQuery, Result<TResponse>> where TQuery : IQuery<TResponse>
+public interface IQueryHandler<TQuery, TResponse>
+    : ICommandHandler<TQuery, Result<TResponse>> where TQuery
+    : IQuery<TResponse>
 {
 }

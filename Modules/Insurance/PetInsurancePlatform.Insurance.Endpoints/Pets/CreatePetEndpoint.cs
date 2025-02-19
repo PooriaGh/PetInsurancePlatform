@@ -1,24 +1,26 @@
 ﻿using FastEndpoints;
-using MediatR;
-using Microsoft.AspNetCore.Http;
 using PetInsurancePlatform.Insurance.Application.Dtos;
 using PetInsurancePlatform.Insurance.Application.Pets.Commands;
+using PetInsurancePlatform.SharedKernel.Extensions;
 
 namespace PetInsurancePlatform.Insurance.Endpoints.Pets;
 
-internal sealed class CreatePetEndpoint(ISender sender) : Endpoint<PetRequestDto, Guid>
+internal sealed class CreatePetEndpoint : Endpoint<PetRequestDto, Guid>
 {
+    public override void Configure()
+    {
+        Post("pets");
+        AllowAnonymous();
+    }
+
     public override async Task HandleAsync(
         PetRequestDto request,
         CancellationToken cancellationToken)
     {
         var command = new CreatePetCommand(request);
 
-        var result = await sender.Send(command, cancellationToken);
+        var result = await command.ExecuteAsync(cancellationToken);
 
-        await SendAsync(
-            result.Value,
-            StatusCodes.Status200OK,
-            cancellationToken);
+        await this.SendResponse(result, res => res.Value);
     }
 }
