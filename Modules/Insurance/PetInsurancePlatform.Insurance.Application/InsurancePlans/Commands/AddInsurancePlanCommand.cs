@@ -9,11 +9,11 @@ using PetInsurancePlatform.SharedKernel.Messaging;
 
 namespace PetInsurancePlatform.Insurance.Application.InsurancePlans.Commands;
 
-public sealed class SelectInsurancePlanCommand(Guid insurancePlanId) : ICommandWithResult<Guid>
+public sealed class AddInsurancePlanCommand(Guid insurancePlanId) : ICommandWithResult<Guid>
 {
     public Guid InsurancePlanId { get; set; } = insurancePlanId;
 
-    internal sealed class RequestValidator : Validator<SelectInsurancePlanCommand>
+    internal sealed class RequestValidator : Validator<AddInsurancePlanCommand>
     {
         public RequestValidator()
         {
@@ -24,9 +24,9 @@ public sealed class SelectInsurancePlanCommand(Guid insurancePlanId) : ICommandW
 
     internal sealed class Handler(
         IInsuranceDbContext dbContext,
-        ILogger<Handler> logger) : ICommandWithResultHandler<SelectInsurancePlanCommand, Guid>
+        ILogger<Handler> logger) : ICommandWithResultHandler<AddInsurancePlanCommand, Guid>
     {
-        public async Task<Result<Guid>> ExecuteAsync(SelectInsurancePlanCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Guid>> ExecuteAsync(AddInsurancePlanCommand request, CancellationToken cancellationToken)
         {
             var plan = await dbContext.InsurancePlans
                 .Include(pt => pt.Policies)

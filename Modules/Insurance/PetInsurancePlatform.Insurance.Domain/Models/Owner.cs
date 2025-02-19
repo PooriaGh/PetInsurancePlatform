@@ -7,8 +7,6 @@ namespace PetInsurancePlatform.Insurance.Domain.Models;
 
 public sealed class Owner : Entity
 {
-    public static readonly Owner None = new();
-
     // Used by EF Core
     private Owner() : base()
     {
@@ -25,8 +23,6 @@ public sealed class Owner : Entity
     public DateOnly DateOfBirth { get; private set; }
 
     public City City { get; private set; } = City.None;
-
-    public IReadOnlyCollection<Pet> Pets { get; } = [];
 
     public static Result<Owner> Create(
         string firstName,

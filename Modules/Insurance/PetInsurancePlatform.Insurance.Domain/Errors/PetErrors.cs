@@ -4,8 +4,6 @@ namespace PetInsurancePlatform.Insurance.Domain.Errors;
 
 public sealed class PetErrors
 {
-    public static readonly ValidationError EmptyOwner = new("The owner of pet is required.");
-
     public static readonly ValidationError EmptyTermsOfService = new("The terms of service is required.");
 
     public static readonly ValidationError DuplicateTermsOfService = new("The terms of service is already accepted.");

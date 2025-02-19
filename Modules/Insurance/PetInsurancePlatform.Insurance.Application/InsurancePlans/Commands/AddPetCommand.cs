@@ -123,8 +123,8 @@ public sealed class AddPetCommand(
             CancellationToken cancellationToken)
         {
             var petType = await dbContext.PetTypes
-            .Include(p => p.Diseases)
-            .FirstOrDefaultAsync(pt => pt.Id == petRequest.PetTypeId, cancellationToken);
+                .Include(p => p.Diseases)
+                .FirstOrDefaultAsync(pt => pt.Id == petRequest.PetTypeId, cancellationToken);
 
             if (petType is null)
             {
@@ -151,11 +151,6 @@ public sealed class AddPetCommand(
             var diseases = await dbContext.Diseases
                 .Where(d => petRequest.DiseasesIds.Contains(d.Id))
                 .ToListAsync(cancellationToken);
-
-            if (city is null)
-            {
-                return Result.NotFound(CityErrors.NotFound(petRequest.CityId));
-            }
 
             var price = Money.Create(petRequest.Price);
 

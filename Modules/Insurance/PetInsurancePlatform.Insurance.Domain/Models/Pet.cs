@@ -3,6 +3,7 @@ using PetInsurancePlatform.Insurance.Domain.Enums;
 using PetInsurancePlatform.Insurance.Domain.Errors;
 using PetInsurancePlatform.Insurance.Domain.ValueObjects;
 using PetInsurancePlatform.SharedKernel.Abstractions;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PetInsurancePlatform.Insurance.Domain.Models;
 
@@ -38,7 +39,7 @@ public sealed class Pet : Entity
     public IReadOnlyCollection<Disease> Diseases { get; private set; } = [];
     public bool HasDiseases => Diseases.Count != 0;
 
-    public Owner Owner { get; private set; } = Owner.None;
+    public Owner? Owner { get; private set; }
 
     public IReadOnlyCollection<StoredFile> BirthCertificatesPages { get; private set; } = [];
 
@@ -111,9 +112,9 @@ public sealed class Pet : Entity
         };
     }
 
-    public Result AddOwner(Owner owner)
+    public Result AddOwner([NotNull] Owner owner)
     {
-        if (owner is null || owner == Owner.None)
+        if (owner == Owner.None)
         {
             return Result.Invalid(PetErrors.EmptyOwner);
         }
@@ -198,7 +199,6 @@ public sealed class Pet : Entity
         List<Appearance> appearances,
         string microchipCode,
         List<Disease> diseases,
-        Owner owner,
         List<StoredFile> birthCertificatesPages,
         StoredFile frontView,
         StoredFile rearView,
@@ -223,14 +223,7 @@ public sealed class Pet : Entity
         Diseases = diseases;
         UpdatedAt = DateTime.UtcNow;
 
-        var result = AddOwner(owner);
-
-        if (!result.IsSuccess)
-        {
-            return result;
-        }
-
-        result = AddImagesAndVideo(
+        var result = AddImagesAndVideo(
             birthCertificatesPages,
             frontView,
             rearView,

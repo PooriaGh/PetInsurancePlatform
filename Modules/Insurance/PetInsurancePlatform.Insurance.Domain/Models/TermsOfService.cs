@@ -1,4 +1,5 @@
 ﻿using Ardalis.Result;
+using Microsoft.AspNetCore.Http.HttpResults;
 using PetInsurancePlatform.Insurance.Domain.Errors;
 using PetInsurancePlatform.SharedKernel.Abstractions;
 
@@ -41,5 +42,23 @@ public sealed class TermsOfService : Entity
             Text = text,
             Version = version,
         };
+    }
+
+    internal Result AcceptTermsOfService(Owner termsOfService)
+    {
+        if (termsOfService is null || termsOfService == TermsOfService.None)
+        {
+            return Result.Invalid(PetErrors.EmptyTermsOfService);
+        }
+
+        if (TermsOfService is null || TermsOfService != TermsOfService.None)
+        {
+            return Result.Invalid(PetErrors.DuplicateTermsOfService);
+        }
+
+        TermsOfService = termsOfService;
+        AcceptedAt = DateTime.UtcNow;
+
+        return Result.Success();
     }
 }

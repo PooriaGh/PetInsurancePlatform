@@ -21,8 +21,6 @@ public sealed class InsurancePolicy : Entity
 
     public Payment? Payment { get; private set; }
 
-    public TermsOfService? TermsOfService { get; private set; }
-
     private InsurancePolicyStatus _status;
     public InsurancePolicyStatus Status
     {
@@ -66,24 +64,6 @@ public sealed class InsurancePolicy : Entity
         }
 
         Pet = pet;
-
-        return Result.Success();
-    }
-
-    internal Result AcceptTermsOfService(TermsOfService termsOfService)
-    {
-        if (termsOfService is null || termsOfService == TermsOfService.None)
-        {
-            return Result.Invalid(PetErrors.EmptyTermsOfService);
-        }
-
-        if (TermsOfService is null || TermsOfService != TermsOfService.None)
-        {
-            return Result.Invalid(PetErrors.DuplicateTermsOfService);
-        }
-
-        TermsOfService = termsOfService;
-        AcceptedAt = DateTime.UtcNow;
 
         return Result.Success();
     }
