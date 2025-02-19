@@ -10,10 +10,11 @@
 
   <ItemGroup>
     <PackageReference Include="FastEndpoints.Swagger" Version="5.34.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Modules\Insurance\PetInsurancePlatform.Insurance.Endpoints\PetInsurancePlatform.Insurance.Endpoints.csproj" />
     <ProjectReference Include="..\Modules\Users\PetInsurancePlatform.Users.Endpoints\PetInsurancePlatform.Users.Endpoints.csproj" />
   </ItemGroup>
 
