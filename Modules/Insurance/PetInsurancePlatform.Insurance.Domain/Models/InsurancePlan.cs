@@ -74,7 +74,7 @@ public sealed class InsurancePlan : Entity
         {
             if (_coverages.Any(c => c == coverage))
             {
-                return Result.Conflict(InsurancePlanErrors.DuplicateCoverage(coverage.Name));
+                return Result.Conflict(InsuranceCoverageErrors.SameName(coverage.Name));
             }
         }
 
@@ -83,29 +83,33 @@ public sealed class InsurancePlan : Entity
         return Result.Success();
     }
 
-    public Result<InsurancePolicy> CreatePolicy()
+    public InsurancePolicy CreatePolicy()
     {
-        var result = InsurancePolicy.Create(this);
+        var policy = InsurancePolicy.Create();
 
-        if (!result.IsSuccess)
-        {
-            return Result.Error(new ErrorList(result.Errors));
-        }
+        _policies.Add(policy);
 
-        _policies.Add(result.Value);
-
-        return result.Value;
+        return policy;
     }
 
     public Result AddPetToPolicy(
-        Pet pet,
-        InsurancePolicy policy)
+        InsurancePolicy policy,
+        string name,
+        string breed,
+        Gender gender,
+        DateOnly dateOfBirth,
+        PetType petType,
+        Money price,
+        City city,
+        Address address,
+        IEnumerable<Appearance> appearances,
+        string microchipCode,
+        IEnumerable<Disease> diseases)
     {
         if (_policies
-            .Where(p => p.Pet is not null)
-            .Any(p => p.Pet! == pet && p.Status == InsurancePolicyStatus.Active))
+            .Any(p => p.Status == InsurancePolicyStatus.Active))
         {
-            return Result.Conflict(InsurancePlanErrors.DuplicatePlan(Name));
+            return Result.Conflict(InsurancePolicyErrors.SameStatus(InsurancePolicyStatus.Active));
         }
 
         if (!_policies.Any(p => p == policy))
@@ -113,7 +117,18 @@ public sealed class InsurancePlan : Entity
             return Result.NotFound(InsurancePolicyErrors.NotFound(policy.Id));
         }
 
-        var result = policy.AddPet(pet);
+        var result = policy.AddPet(
+            name,
+            breed,
+            gender,
+            dateOfBirth,
+            petType,
+            price,
+            city,
+            address,
+            appearances,
+            microchipCode,
+            diseases);
 
         if (!result.IsSuccess)
         {
@@ -133,7 +148,7 @@ public sealed class InsurancePlan : Entity
 
         if (policy is null)
         {
-            return Result.NotFound(InsurancePolicyErrors.NotFoundPolicy(InsurancePolicyStatus.PaymentPending, pet.Name));
+            return Result.NotFound(InsurancePolicyErrors.NotFound(InsurancePolicyStatus.PaymentPending));
         }
 
         var result = policy.Pay(payment);
@@ -154,7 +169,7 @@ public sealed class InsurancePlan : Entity
 
         if (policy is null)
         {
-            return Result.NotFound(InsurancePolicyErrors.NotFoundPolicy(InsurancePolicyStatus.PaymentPending, pet.Name));
+            return Result.NotFound(InsurancePolicyErrors.NotFound(InsurancePolicyStatus.PaymentPending));
         }
 
         policy.Issue();

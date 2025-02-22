@@ -15,13 +15,9 @@ public sealed class InsurancePolicy : Entity
 
     public string Code { get; set; } = string.Empty;
 
-    public InsurancePlan Plan { get; private set; } = InsurancePlan.None;
-
     public Pet? Pet { get; private set; }
 
-    public Payment? Payment { get; private set; }
-
-    public TermsOfService? TermsOfService { get; private set; }
+    public Payment Payment { get; private set; } = Payment.None;
 
     private InsurancePolicyStatus _status;
     public InsurancePolicyStatus Status
@@ -34,35 +30,51 @@ public sealed class InsurancePolicy : Entity
 
     public DateTime CreatedAt { get; private set; }
 
-    public DateTime? AcceptedAt { get; private set; }
-
     public DateTime? PaidAt { get; private set; }
 
     public DateTime? IssuedAt { get; private set; }
 
     public DateTime? ExpiredAt { get; private set; }
 
-    internal static Result<InsurancePolicy> Create(InsurancePlan plan)
+    internal static InsurancePolicy Create()
     {
-        if (plan is null || plan == InsurancePlan.None)
-        {
-            return Result.Invalid(InsurancePolicyErrors.EmptyInsurancePlan);
-        }
-
         return new InsurancePolicy
         {
             Code = Guid.NewGuid().ToString("N"),
-            Plan = plan,
             Status = InsurancePolicyStatus.PaymentPending,
             CreatedAt = DateTime.UtcNow,
         };
     }
 
-    internal Result AddPet(Pet pet)
+    internal Result AddPet(
+        string name,
+        string breed,
+        Gender gender,
+        DateOnly dateOfBirth,
+        PetType petType,
+        Money price,
+        City city,
+        Address address,
+        IEnumerable<Appearance> appearances,
+        string microchipCode,
+        IEnumerable<Disease> diseases)
     {
-        if (pet is null || pet == Pet.None)
+        var pet = Pet.Create(
+            name,
+            breed,
+            gender,
+            dateOfBirth,
+            petType,
+            price,
+            city,
+            address,
+            appearances,
+            microchipCode,
+            diseases);
+
+        if (!pet.IsSuccess)
         {
-            return Result.Invalid(InsurancePolicyErrors.EmptyPet);
+            return Result.Error(new ErrorList([.. pet.Errors]));
         }
 
         Pet = pet;
@@ -70,29 +82,57 @@ public sealed class InsurancePolicy : Entity
         return Result.Success();
     }
 
-    internal Result AcceptTermsOfService(TermsOfService termsOfService)
+    public Result EditPet(
+        string name,
+        string breed,
+        Gender gender,
+        DateOnly dateOfBirth,
+        PetType petType,
+        Money price,
+        City city,
+        Address address,
+        List<Appearance> appearances,
+        string microchipCode,
+        List<Disease> diseases,
+        List<StoredFile> birthCertificatesPages,
+        StoredFile frontView,
+        StoredFile rearView,
+        StoredFile rightSideView,
+        StoredFile leftSideView,
+        StoredFile walkingVideo,
+        StoredFile healthCertificate)
     {
-        if (termsOfService is null || termsOfService == TermsOfService.None)
+        if (Pet is null || Pet == Pet.None)
         {
-            return Result.Invalid(PetErrors.EmptyTermsOfService);
+            return Result.NotFound(PetErrors.NotFound());
         }
 
-        if (TermsOfService is null || TermsOfService != TermsOfService.None)
-        {
-            return Result.Invalid(PetErrors.DuplicateTermsOfService);
-        }
-
-        TermsOfService = termsOfService;
-        AcceptedAt = DateTime.UtcNow;
-
-        return Result.Success();
+        return Pet.Update(
+            name,
+            breed,
+            gender,
+            dateOfBirth,
+            petType,
+            price,
+            city,
+            address,
+            appearances,
+            microchipCode,
+            diseases,
+            birthCertificatesPages,
+            frontView,
+            rearView,
+            rightSideView,
+            leftSideView,
+            walkingVideo,
+            healthCertificate);
     }
 
     internal Result Pay(Payment payment)
     {
         if (payment is null || payment == Payment.None)
         {
-            return Result.Invalid(InsurancePolicyErrors.EmptyPayment);
+            return Result.Invalid(Payment.Empty);
         }
 
         Status = InsurancePolicyStatus.HealthCertificatePending;

@@ -19,8 +19,13 @@ internal class DiseaseConfiguration : IEntityTypeConfiguration<Disease>
            .Ignore(d => d.PetTypes);
 
         builder
-            .HasMany(d => d.PetTypeDiseases)
-            .WithOne()
+            .HasMany<PetTypeDisease>()
+            .WithOne(ptd => ptd.Disease)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+          .HasOne<Pet>()
+          .WithMany(p => p.Diseases)
+          .OnDelete(DeleteBehavior.Restrict);
     }
 }

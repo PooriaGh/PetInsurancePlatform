@@ -38,8 +38,6 @@ public sealed class Pet : Entity
     public IReadOnlyCollection<Disease> Diseases { get; private set; } = [];
     public bool HasDiseases => Diseases.Count != 0;
 
-    public Owner Owner { get; private set; } = Owner.None;
-
     public IReadOnlyCollection<StoredFile> BirthCertificatesPages { get; private set; } = [];
 
     public StoredFile FrontView { get; private set; } = StoredFile.None;
@@ -62,7 +60,7 @@ public sealed class Pet : Entity
 
     public DateTime? DeletedAt { get; private set; }
 
-    public static Result<Pet> Create(
+    internal static Result<Pet> Create(
         string name,
         string breed,
         Gender gender,
@@ -71,9 +69,9 @@ public sealed class Pet : Entity
         Money price,
         City city,
         Address address,
-        List<Appearance> appearances,
+        IEnumerable<Appearance> appearances,
         string microchipCode,
-        List<Disease> diseases)
+        IEnumerable<Disease> diseases)
     {
         appearances ??= [];
         diseases ??= [];
@@ -104,27 +102,14 @@ public sealed class Pet : Entity
             Price = price,
             City = city,
             Address = address,
-            Appearances = appearances,
+            Appearances = [.. appearances],
             MicrochipCode = microchipCode,
             CreatedAt = DateTime.UtcNow,
-            Diseases = diseases,
+            Diseases = [.. diseases],
         };
     }
 
-    public Result AddOwner(Owner owner)
-    {
-        if (owner is null || owner == Owner.None)
-        {
-            return Result.Invalid(PetErrors.EmptyOwner);
-        }
-
-        Owner = owner;
-        UpdatedAt = DateTime.UtcNow;
-
-        return Result.Success();
-    }
-
-    public Result AddImagesAndVideo(
+    internal Result AddImagesAndVideo(
         List<StoredFile> birthCertificatesPages,
         StoredFile frontView,
         StoredFile rearView,
@@ -132,34 +117,20 @@ public sealed class Pet : Entity
         StoredFile leftSideView,
         StoredFile walkingVideo)
     {
-        if (birthCertificatesPages is null || birthCertificatesPages.Count == 0)
+        if (birthCertificatesPages is null
+            || birthCertificatesPages.Count == 0
+            || frontView is null
+            || frontView == StoredFile.None
+            || rearView is null
+            || rearView == StoredFile.None
+            || rightSideView is null
+            || rightSideView == StoredFile.None
+            || leftSideView is null
+            || leftSideView == StoredFile.None
+            || walkingVideo is null
+            || walkingVideo == StoredFile.None)
         {
-            return Result.Invalid(PetErrors.EmptyBirthCertificatesPages);
-        }
-
-        if (frontView is null || frontView == StoredFile.None)
-        {
-            return Result.Invalid(PetErrors.EmptyFrontView);
-        }
-
-        if (rearView is null || rearView == StoredFile.None)
-        {
-            return Result.Invalid(PetErrors.EmptyRearView);
-        }
-
-        if (rightSideView is null || rightSideView == StoredFile.None)
-        {
-            return Result.Invalid(PetErrors.EmptyRightSideView);
-        }
-
-        if (leftSideView is null || leftSideView == StoredFile.None)
-        {
-            return Result.Invalid(PetErrors.EmptyLeftSideOfView);
-        }
-
-        if (walkingVideo is null || walkingVideo == StoredFile.None)
-        {
-            return Result.Invalid(PetErrors.EmptyWalkingVideo);
+            return Result.Invalid(StoredFile.Empty);
         }
 
         BirthCertificatesPages = birthCertificatesPages;
@@ -173,11 +144,11 @@ public sealed class Pet : Entity
         return Result.Success();
     }
 
-    public Result AddHealthCertificate(StoredFile healthCertificate)
+    internal Result AddHealthCertificate(StoredFile healthCertificate)
     {
         if (healthCertificate is null || healthCertificate == StoredFile.None)
         {
-            return Result.Invalid(PetErrors.EmptyHealthCertificate);
+            return Result.Invalid(StoredFile.Empty);
         }
 
         HealthCertificate = healthCertificate;
@@ -186,20 +157,19 @@ public sealed class Pet : Entity
         return Result.Success();
     }
 
-    public Result Update(
+    internal Result Update(
         string name,
         string breed,
         Gender gender,
         DateOnly dateOfBirth,
-        PetType type,
+        PetType petType,
         Money price,
         City city,
         Address address,
-        List<Appearance> appearances,
+        IEnumerable<Appearance> appearances,
         string microchipCode,
-        List<Disease> diseases,
-        Owner owner,
-        List<StoredFile> birthCertificatesPages,
+        IEnumerable<Disease> diseases,
+        IEnumerable<StoredFile> birthCertificatesPages,
         StoredFile frontView,
         StoredFile rearView,
         StoredFile rightSideView,
@@ -214,24 +184,17 @@ public sealed class Pet : Entity
         Breed = breed;
         Gender = gender;
         DateOfBirth = dateOfBirth;
-        PetType = type;
+        PetType = petType;
         Price = price;
         City = city;
         Address = address;
-        Appearances = appearances;
+        Appearances = [.. appearances];
         MicrochipCode = microchipCode;
-        Diseases = diseases;
+        Diseases = [.. diseases];
         UpdatedAt = DateTime.UtcNow;
 
-        var result = AddOwner(owner);
-
-        if (!result.IsSuccess)
-        {
-            return result;
-        }
-
-        result = AddImagesAndVideo(
-            birthCertificatesPages,
+        var result = AddImagesAndVideo(
+            [.. birthCertificatesPages],
             frontView,
             rearView,
             rightSideView,
@@ -253,7 +216,7 @@ public sealed class Pet : Entity
         return Result.Success();
     }
 
-    public void Delete()
+    internal void Delete()
     {
         Deleted = true;
         DeletedAt = DateTime.UtcNow;

@@ -4,26 +4,24 @@ using PetInsurancePlatform.Insurance.Domain.Models;
 
 namespace PetInsurancePlatform.Insurance.Infrastructure.Configurations;
 
-internal class InsurancePlanConfiguration : IEntityTypeConfiguration<InsurancePlan>
+internal class TermsOfServiceConfiguration : IEntityTypeConfiguration<TermsOfService>
 {
-    public void Configure(EntityTypeBuilder<InsurancePlan> builder)
+    public void Configure(EntityTypeBuilder<TermsOfService> builder)
     {
         builder
-            .HasKey(p => p.Id);
+            .HasKey(t => t.Id);
 
         builder
-            .Property(p => p.Id)
+            .Property(t => t.Id)
             .ValueGeneratedNever();
 
         builder
-           .ComplexProperty(p => p.Price);
+            .HasIndex(t => t.Id)
+            .IsUnique();
 
         builder
-            .ComplexProperty(p => p.Coverages);
-
-        builder
-            .HasMany(p => p.Policies)
-            .WithOne()
+            .HasMany<OwnerTermsOfService>()
+            .WithOne(ot => ot.TermsOfService)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

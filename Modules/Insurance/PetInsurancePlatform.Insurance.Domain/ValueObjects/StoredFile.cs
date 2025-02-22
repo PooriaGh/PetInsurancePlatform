@@ -9,6 +9,8 @@ public sealed class StoredFile : ValueObject
 {
     public static readonly StoredFile None = new();
 
+    public static readonly ValidationError Empty = new("The stored file is required.");
+
     private const int _maximumLimit = 10 * 1024 * 1024; // 10 MB
 
     private static readonly string[] _supportedContenTypes = [".png", ".jpeg", ".svg"];

@@ -19,15 +19,11 @@ public sealed class PetType : Entity
     public AgeRange AgeRange { get; private set; } = AgeRange.None;
 
     private readonly List<PetTypeDisease> _petTypeDiseases = [];
-    public IReadOnlyCollection<PetTypeDisease> PetTypeDiseases => _petTypeDiseases.AsReadOnly();
     public IReadOnlyCollection<Disease> Diseases => _petTypeDiseases
         .OrderBy(atd => atd.CreatedAt)
         .Select(d => d.Disease)
         .ToList()
         .AsReadOnly();
-
-    private readonly List<Pet> _pets = [];
-    public IReadOnlyCollection<Pet> Pets => _pets.AsReadOnly();
 
     public static Result<PetType> Create(
         string name,
@@ -49,7 +45,7 @@ public sealed class PetType : Entity
     {
         if (disease is null)
         {
-            return Result.Invalid(PetTypeErrors.EmptyDisease);
+            return Result.Invalid(DiseaseErrors.Empty);
         }
 
         if (_petTypeDiseases.Any(atd => atd.Disease == disease))
@@ -66,7 +62,7 @@ public sealed class PetType : Entity
     {
         if (disease is null)
         {
-            return Result.Invalid(PetTypeErrors.EmptyDisease);
+            return Result.Invalid(DiseaseErrors.Empty);
         }
 
         var petTypeDisease = _petTypeDiseases.FirstOrDefault(atd => atd.Disease == disease);

@@ -24,16 +24,21 @@ public sealed class Owner : Entity
 
     public DateOnly DateOfBirth { get; private set; }
 
-    public City City { get; private set; } = City.None;
+    private readonly List<Pet> _pets = [];
+    public IReadOnlyCollection<Pet> Pets => _pets.AsReadOnly();
 
-    public IReadOnlyCollection<Pet> Pets { get; } = [];
+    private readonly List<OwnerTermsOfService> _ownerTermsOfServices = [];
+    public IReadOnlyCollection<TermsOfService> TermsOfServices => _ownerTermsOfServices
+        .Select(terms => terms.TermsOfService)
+        .OrderByDescending(terms => terms.Version)
+        .ToList()
+        .AsReadOnly();
 
     public static Result<Owner> Create(
         string firstName,
         string lastName,
         long nationalID,
-        DateOnly DateOfBirth,
-        City City)
+        DateOnly DateOfBirth)
     {
         if (string.IsNullOrWhiteSpace(firstName))
         {
@@ -61,7 +66,56 @@ public sealed class Owner : Entity
             LastName = lastName,
             NationalID = nationalID,
             DateOfBirth = DateOfBirth,
-            City = City,
         };
+    }
+
+    public Result<Pet> AddPet(Pet pet)
+    {
+        if (pet is null)
+        {
+            return Result.NotFound(PetErrors.NotFound());
+        }
+
+        if (pet == Pet.None)
+        {
+            return Result.NotFound(PetErrors.NotFound(pet.Id));
+        }
+
+        _pets.Add(pet);
+
+        return pet;
+    }
+
+    public Result RemovePet(Guid id)
+    {
+        var pet = _pets.FirstOrDefault(p => p.Id == id);
+
+        if (pet is null)
+        {
+            return Result.NotFound(PetErrors.NotFound(id));
+        }
+
+        pet.Delete();
+
+        return Result.Success();
+    }
+
+    public Result AcceptTermsOfService(TermsOfService termsOfService)
+    {
+        if (_ownerTermsOfServices.Any(t => t == termsOfService))
+        {
+            return Result.Invalid(TermsOfServiceErrors.AlreadyAccepted);
+        }
+
+        var ownerTermsOfService = OwnerTermsOfService.Create(termsOfService, this);
+
+        if (!ownerTermsOfService.IsSuccess)
+        {
+            return Result.Error(new ErrorList([.. ownerTermsOfService.Errors]));
+        }
+
+        _ownerTermsOfServices.Add(ownerTermsOfService.Value);
+
+        return Result.Success();
     }
 }

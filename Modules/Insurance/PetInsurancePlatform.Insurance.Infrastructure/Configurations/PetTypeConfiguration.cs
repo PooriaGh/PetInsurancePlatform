@@ -19,13 +19,13 @@ internal class PetTypeConfiguration : IEntityTypeConfiguration<PetType>
             .Ignore(pt => pt.Diseases);
 
         builder
-            .HasMany(pt => pt.Pets)
-            .WithOne()
+            .HasMany<Pet>()
+            .WithOne(p => p.PetType)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasMany(pt => pt.PetTypeDiseases)
-            .WithOne()
+            .HasMany<PetTypeDisease>()
+            .WithOne(pt => pt.PetType)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

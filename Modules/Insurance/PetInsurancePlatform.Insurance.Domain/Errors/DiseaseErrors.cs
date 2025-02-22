@@ -4,6 +4,8 @@ namespace PetInsurancePlatform.Insurance.Domain.Errors;
 
 public sealed class DiseaseErrors
 {
+    public static readonly ValidationError Empty = new("The disease is required.");
+
     public static readonly ValidationError EmptyName = new("The name of disease is required.");
 
     public static readonly string NotCreated = "The disease isn't created.";

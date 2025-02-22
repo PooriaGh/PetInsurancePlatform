@@ -16,7 +16,7 @@ internal class PetConfiguration : IEntityTypeConfiguration<Pet>
             .ValueGeneratedNever();
 
         builder
-           .Ignore(p => p.HasDiseases);
+            .Ignore(p => p.HasDiseases);
 
         builder
             .ComplexProperty(p => p.Appearances);

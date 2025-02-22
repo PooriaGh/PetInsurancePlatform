@@ -6,8 +6,6 @@ public sealed class PetTypeErrors
 {
     public static readonly ValidationError EmptyName = new("The name of pet type is required.");
 
-    public static readonly ValidationError EmptyDisease = new("The disease of pet type is required.");
-
     public static readonly string NotCreated = "The pet type isn't created.";
 
     public static string NotFound(Guid id)

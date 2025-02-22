@@ -62,7 +62,7 @@ public sealed class Province : Entity
     {
         if (_cities.Any(c => c == city))
         {
-            return Result.Conflict(ProvinceErrors.DuplicateCity(city.Name));
+            return Result.Conflict(CityErrors.SameName(city.Name));
         }
 
         _cities.Add(city);
@@ -74,7 +74,7 @@ public sealed class Province : Entity
     {
         if (!_cities.Any(c => c == city))
         {
-            return Result.NotFound(ProvinceErrors.NotFoundCity(city.Id));
+            return Result.NotFound(CityErrors.NotFound(city.Id));
         }
 
         _cities.Remove(city);

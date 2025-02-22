@@ -28,8 +28,8 @@ internal class InsurancePolicyConfiguration : IEntityTypeConfiguration<Insurance
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasOne(p => p.Plan)
-            .WithMany()
+            .HasOne<InsurancePlan>()
+            .WithMany(p => p.Policies)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

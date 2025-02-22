@@ -22,4 +22,9 @@ public sealed class CityErrors
     {
         return $"The city with ID = {id} isn't removed.";
     }
+
+    public static string SameName(string name)
+    {
+        return $"There is already a city with name = {name}.";
+    }
 }

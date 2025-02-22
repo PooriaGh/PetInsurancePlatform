@@ -19,13 +19,13 @@ internal class OwnerConfiguration : IEntityTypeConfiguration<Owner>
            .Ignore(o => o.Id);
 
         builder
-            .HasOne(o => o.City)
-            .WithMany()
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
            .HasMany(o => o.Pets)
            .WithOne()
+           .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+           .HasMany<OwnerTermsOfService>()
+           .WithOne(ot => ot.Owner)
            .OnDelete(DeleteBehavior.Restrict);
     }
 }

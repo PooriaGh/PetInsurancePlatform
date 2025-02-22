@@ -9,6 +9,8 @@ public sealed class Payment : ValueObject
 {
     public static readonly Payment None = new();
 
+    public static readonly ValidationError Empty = new("The payment is required.");
+
     // Used by EF Core
     private Payment()
     {
