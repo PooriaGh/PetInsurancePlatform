@@ -9,11 +9,11 @@ using PetInsurancePlatform.SharedKernel.Messaging;
 
 namespace PetInsurancePlatform.Insurance.Application.InsurancePlans.Commands;
 
-public sealed class SelectInsurancePlanCommand(Guid insurancePlanId) : ICommandWithResult<Guid>
+public sealed class AddInsurancePolicyCommand(Guid insurancePlanId) : ICommandWithResult<Guid>
 {
     public Guid InsurancePlanId { get; set; } = insurancePlanId;
 
-    internal sealed class RequestValidator : Validator<SelectInsurancePlanCommand>
+    internal sealed class RequestValidator : Validator<AddInsurancePolicyCommand>
     {
         public RequestValidator()
         {
@@ -24,9 +24,9 @@ public sealed class SelectInsurancePlanCommand(Guid insurancePlanId) : ICommandW
 
     internal sealed class Handler(
         IInsuranceDbContext dbContext,
-        ILogger<Handler> logger) : ICommandWithResultHandler<SelectInsurancePlanCommand, Guid>
+        ILogger<Handler> logger) : ICommandWithResultHandler<AddInsurancePolicyCommand, Guid>
     {
-        public async Task<Result<Guid>> ExecuteAsync(SelectInsurancePlanCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Guid>> ExecuteAsync(AddInsurancePolicyCommand request, CancellationToken cancellationToken)
         {
             var plan = await dbContext.InsurancePlans
                 .Include(pt => pt.Policies)
@@ -39,16 +39,13 @@ public sealed class SelectInsurancePlanCommand(Guid insurancePlanId) : ICommandW
 
             var policy = plan.CreatePolicy();
 
-            if (!policy.IsSuccess)
-            {
-                return Result.Error(new ErrorList(policy.Errors));
-            }
+            dbContext.InsurancePolicies.Add(policy);
 
             try
             {
                 await dbContext.SaveChangesAsync(cancellationToken);
 
-                return policy.Value.Id;
+                return policy.Id;
             }
             catch (Exception ex)
             {

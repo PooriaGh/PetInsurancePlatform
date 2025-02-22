@@ -4,6 +4,8 @@ namespace PetInsurancePlatform.Insurance.Application.Dtos;
 
 public sealed class PetRequestDto
 {
+    public static readonly PetRequestDto None = new();
+
     public string Name { get; set; } = string.Empty;
 
     public string Breed { get; set; } = string.Empty;

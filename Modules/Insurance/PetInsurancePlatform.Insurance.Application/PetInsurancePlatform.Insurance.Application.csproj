@@ -13,7 +13,7 @@
   <ItemGroup>
     <Folder Include="InsurancePlans\Queries\" />
     <Folder Include="ServiceInstallers\" />
-    <Folder Include="Pets\Queries\" />
+    <Folder Include="Owners\Queries\" />
   </ItemGroup>
 
   <ItemGroup>
