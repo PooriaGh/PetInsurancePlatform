@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetInsurancePlatform.Insura
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetInsurancePlatform.Insurance.Endpoints", "Modules\Insurance\PetInsurancePlatform.Insurance.Endpoints\PetInsurancePlatform.Insurance.Endpoints.csproj", "{D6B445FE-7462-4E5B-9084-8D552D2B0DFA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetInsurancePlatform.Insurance.Tests", "Modules\Insurance\PetInsurancePlatform.Insurance.Tests\PetInsurancePlatform.Insurance.Tests.csproj", "{617534B7-054D-41BB-8334-3611C750E575}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{D6B445FE-7462-4E5B-9084-8D552D2B0DFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6B445FE-7462-4E5B-9084-8D552D2B0DFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6B445FE-7462-4E5B-9084-8D552D2B0DFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{617534B7-054D-41BB-8334-3611C750E575}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{617534B7-054D-41BB-8334-3611C750E575}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{617534B7-054D-41BB-8334-3611C750E575}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{617534B7-054D-41BB-8334-3611C750E575}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -102,5 +108,9 @@ Global
 		{27B4B4D3-CB70-40BF-A4A3-A073974A25E1} = {1A8D780D-706F-4DDC-925A-E2B9FF28ED64}
 		{649DE8C1-60C1-46CB-83A0-2EBEE0E8B79F} = {1A8D780D-706F-4DDC-925A-E2B9FF28ED64}
 		{D6B445FE-7462-4E5B-9084-8D552D2B0DFA} = {1A8D780D-706F-4DDC-925A-E2B9FF28ED64}
+		{617534B7-054D-41BB-8334-3611C750E575} = {1A8D780D-706F-4DDC-925A-E2B9FF28ED64}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BD1024B0-17DB-4B86-BBB0-0F5D079CC0BD}
 	EndGlobalSection
 EndGlobal
