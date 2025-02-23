@@ -15,7 +15,7 @@ public sealed class City : Entity
 
     public string Name { get; private set; } = string.Empty;
 
-    public Province Province { get; set; } = Province.None;
+    public Province Province { get; private set; } = Province.None;
 
     public static Result<City> Create(string name)
     {

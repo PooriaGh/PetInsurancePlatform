@@ -23,22 +23,15 @@ public sealed class Pet : Entity
 
     public DateOnly DateOfBirth { get; private set; }
 
-    public PetType PetType { get; private set; } = PetType.None;
-
     public Money Price { get; private set; } = Money.Zero;
-
-    public City City { get; private set; } = City.None;
 
     public Address Address { get; private set; } = Address.None;
 
-    public IReadOnlyCollection<Appearance> Appearances { get; private set; } = [];
+    public List<Appearance> Appearances { get; } = [];
 
     public string MicrochipCode { get; private set; } = string.Empty;
 
-    public IReadOnlyCollection<Disease> Diseases { get; private set; } = [];
-    public bool HasDiseases => Diseases.Count != 0;
-
-    public IReadOnlyCollection<StoredFile> BirthCertificatesPages { get; private set; } = [];
+    public List<StoredFile> BirthCertificatesPages { get; } = [];
 
     public StoredFile FrontView { get; private set; } = StoredFile.None;
 
@@ -60,17 +53,24 @@ public sealed class Pet : Entity
 
     public DateTime? DeletedAt { get; private set; }
 
+    public PetType PetType { get; private set; } = PetType.None;
+
+    public City City { get; private set; } = City.None;
+
+    public IReadOnlyCollection<Disease> Diseases { get; private set; } = [];
+    public bool HasDiseases => Diseases.Count != 0;
+
     internal static Result<Pet> Create(
         string name,
         string breed,
         Gender gender,
         DateOnly dateOfBirth,
-        PetType petType,
         Money price,
-        City city,
         Address address,
         IEnumerable<Appearance> appearances,
         string microchipCode,
+        PetType petType,
+        City city,
         IEnumerable<Disease> diseases)
     {
         appearances ??= [];
@@ -92,21 +92,24 @@ public sealed class Pet : Entity
             }
         }
 
-        return new Pet
+        var pet = new Pet
         {
             Name = name,
             Breed = breed,
             Gender = gender,
             DateOfBirth = dateOfBirth,
-            PetType = petType,
             Price = price,
-            City = city,
             Address = address,
-            Appearances = [.. appearances],
             MicrochipCode = microchipCode,
             CreatedAt = DateTime.UtcNow,
+            PetType = petType,
+            City = city,
             Diseases = [.. diseases],
         };
+
+        pet.Appearances.AddRange(appearances);
+
+        return pet;
     }
 
     internal Result AddImagesAndVideo(
@@ -133,7 +136,7 @@ public sealed class Pet : Entity
             return Result.Invalid(StoredFile.Empty);
         }
 
-        BirthCertificatesPages = birthCertificatesPages;
+        BirthCertificatesPages.AddRange(birthCertificatesPages);
         FrontView = frontView;
         RearView = rearView;
         RightSideView = rightSideView;
@@ -162,20 +165,20 @@ public sealed class Pet : Entity
         string breed,
         Gender gender,
         DateOnly dateOfBirth,
-        PetType petType,
         Money price,
-        City city,
         Address address,
         IEnumerable<Appearance> appearances,
         string microchipCode,
-        IEnumerable<Disease> diseases,
         IEnumerable<StoredFile> birthCertificatesPages,
         StoredFile frontView,
         StoredFile rearView,
         StoredFile rightSideView,
         StoredFile leftSideView,
         StoredFile walkingVideo,
-        StoredFile healthCertificate)
+        StoredFile healthCertificate,
+        PetType petType,
+        City city,
+        IEnumerable<Disease> diseases)
     {
         appearances ??= [];
         diseases ??= [];
@@ -184,14 +187,14 @@ public sealed class Pet : Entity
         Breed = breed;
         Gender = gender;
         DateOfBirth = dateOfBirth;
-        PetType = petType;
         Price = price;
-        City = city;
         Address = address;
-        Appearances = [.. appearances];
+        Appearances.AddRange(appearances);
         MicrochipCode = microchipCode;
-        Diseases = [.. diseases];
         UpdatedAt = DateTime.UtcNow;
+        PetType = petType;
+        City = city;
+        Diseases = [.. diseases];
 
         var result = AddImagesAndVideo(
             [.. birthCertificatesPages],

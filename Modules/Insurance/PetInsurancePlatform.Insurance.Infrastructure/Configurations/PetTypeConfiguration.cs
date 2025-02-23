@@ -19,6 +19,9 @@ internal class PetTypeConfiguration : IEntityTypeConfiguration<PetType>
             .Ignore(pt => pt.Diseases);
 
         builder
+            .ComplexProperty(pt => pt.AgeRange);
+
+        builder
             .HasMany<Pet>()
             .WithOne(p => p.PetType)
             .OnDelete(DeleteBehavior.Restrict);

@@ -18,7 +18,6 @@ public sealed class Province : Entity
     public bool Deleted { get; private set; }
 
     private readonly List<City> _cities = [];
-
     public IReadOnlyCollection<City> Cities => _cities.AsReadOnly();
 
     public static Result<Province> Create(string name)

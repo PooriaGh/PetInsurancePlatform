@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetInsurancePlatform.Insurance.Application.Data;
 using PetInsurancePlatform.Insurance.Domain.Models;
-using PetInsurancePlatform.Insurance.Domain.ValueObjects;
 using PetInsurancePlatform.SharedKernel.Data;
 using System.Reflection;
 
 namespace PetInsurancePlatform.Insurance.Infrastructure.Data;
 
-internal sealed class InuranceDbContext : BaseDbContext, IInsuranceDbContext
+public sealed class InsuranceDbContext(DbContextOptions<InsuranceDbContext> options)
+    : BaseDbContext<InsuranceDbContext>(options), IInsuranceDbContext
 {
     public const string DB_SCHEMA = "insurance";
 
@@ -20,8 +20,6 @@ internal sealed class InuranceDbContext : BaseDbContext, IInsuranceDbContext
     public DbSet<Pet> Pets => Set<Pet>();
 
     public DbSet<InsurancePlan> InsurancePlans => Set<InsurancePlan>();
-
-    public DbSet<InsuranceCoverage> InsuranceCoverages => Set<InsuranceCoverage>();
 
     public DbSet<InsurancePolicy> InsurancePolicies => Set<InsurancePolicy>();
 

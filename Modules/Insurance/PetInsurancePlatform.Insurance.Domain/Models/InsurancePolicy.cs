@@ -15,8 +15,6 @@ public sealed class InsurancePolicy : Entity
 
     public string Code { get; set; } = string.Empty;
 
-    public Pet? Pet { get; private set; }
-
     public Payment Payment { get; private set; } = Payment.None;
 
     private InsurancePolicyStatus _status;
@@ -36,6 +34,8 @@ public sealed class InsurancePolicy : Entity
 
     public DateTime? ExpiredAt { get; private set; }
 
+    public Pet? Pet { get; private set; }
+
     internal static InsurancePolicy Create()
     {
         return new InsurancePolicy
@@ -51,12 +51,12 @@ public sealed class InsurancePolicy : Entity
         string breed,
         Gender gender,
         DateOnly dateOfBirth,
-        PetType petType,
         Money price,
-        City city,
         Address address,
         IEnumerable<Appearance> appearances,
         string microchipCode,
+        PetType petType,
+        City city,
         IEnumerable<Disease> diseases)
     {
         var pet = Pet.Create(
@@ -64,12 +64,12 @@ public sealed class InsurancePolicy : Entity
             breed,
             gender,
             dateOfBirth,
-            petType,
             price,
-            city,
             address,
             appearances,
             microchipCode,
+            petType,
+            city,
             diseases);
 
         if (!pet.IsSuccess)
@@ -87,20 +87,20 @@ public sealed class InsurancePolicy : Entity
         string breed,
         Gender gender,
         DateOnly dateOfBirth,
-        PetType petType,
         Money price,
-        City city,
         Address address,
         List<Appearance> appearances,
         string microchipCode,
-        List<Disease> diseases,
         List<StoredFile> birthCertificatesPages,
         StoredFile frontView,
         StoredFile rearView,
         StoredFile rightSideView,
         StoredFile leftSideView,
         StoredFile walkingVideo,
-        StoredFile healthCertificate)
+        StoredFile healthCertificate,
+        PetType petType,
+        City city,
+        List<Disease> diseases)
     {
         if (Pet is null || Pet == Pet.None)
         {
@@ -112,20 +112,20 @@ public sealed class InsurancePolicy : Entity
             breed,
             gender,
             dateOfBirth,
-            petType,
             price,
-            city,
             address,
             appearances,
             microchipCode,
-            diseases,
             birthCertificatesPages,
             frontView,
             rearView,
             rightSideView,
             leftSideView,
             walkingVideo,
-            healthCertificate);
+            healthCertificate,
+            petType,
+            city,
+            diseases);
     }
 
     internal Result Pay(Payment payment)

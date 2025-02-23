@@ -16,10 +16,6 @@ internal class PetTypeDiseaseConfiguration : IEntityTypeConfiguration<PetTypeDis
             .ValueGeneratedNever();
 
         builder
-            .HasIndex(ptd => new { ptd.PetType, ptd.Disease })
-            .IsUnique();
-
-        builder
             .HasOne(ptd => ptd.PetType)
             .WithMany()
             .OnDelete(DeleteBehavior.Restrict);

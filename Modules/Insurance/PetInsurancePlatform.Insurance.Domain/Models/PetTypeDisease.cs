@@ -8,12 +8,11 @@ public sealed class PetTypeDisease : Entity
     private PetTypeDisease()
     {
     }
+    public DateTime CreatedAt { get; private set; }
 
     public PetType PetType { get; private set; } = PetType.None;
 
     public Disease Disease { get; private set; } = Disease.None;
-
-    public DateTime CreatedAt { get; private set; }
 
     internal static PetTypeDisease Create(
         PetType petType,
@@ -21,9 +20,9 @@ public sealed class PetTypeDisease : Entity
     {
         return new PetTypeDisease
         {
+            CreatedAt = DateTime.UtcNow,
             PetType = petType,
             Disease = disease,
-            CreatedAt = DateTime.UtcNow,
         };
     }
 }

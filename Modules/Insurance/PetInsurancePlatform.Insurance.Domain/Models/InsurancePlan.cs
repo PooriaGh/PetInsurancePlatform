@@ -21,15 +21,14 @@ public sealed class InsurancePlan : Entity
 
     public Money Price { get; private set; } = Money.Zero;
 
-    private readonly List<InsurancePolicy> _policies = [];
-    public IReadOnlyCollection<InsurancePolicy> Policies => _policies.AsReadOnly();
-
-    private readonly List<InsuranceCoverage> _coverages = [];
-    public IReadOnlyCollection<InsuranceCoverage> Coverages => _coverages.AsReadOnly();
+    public List<InsuranceCoverage> Coverages { get; } = [];
 
     public DateTime CreatedAt { get; private set; }
 
     public DateTime? UpdatedAt { get; private set; }
+
+    private readonly List<InsurancePolicy> _policies = [];
+    public IReadOnlyCollection<InsurancePolicy> Policies => _policies.AsReadOnly();
 
     public static Result<InsurancePlan> Create(
         string name,
@@ -72,13 +71,13 @@ public sealed class InsurancePlan : Entity
     {
         foreach (var coverage in coverages)
         {
-            if (_coverages.Any(c => c == coverage))
+            if (Coverages.Any(c => c == coverage))
             {
                 return Result.Conflict(InsuranceCoverageErrors.SameName(coverage.Name));
             }
         }
 
-        _coverages.AddRange(coverages);
+        Coverages.AddRange(coverages);
 
         return Result.Success();
     }
@@ -122,12 +121,12 @@ public sealed class InsurancePlan : Entity
             breed,
             gender,
             dateOfBirth,
-            petType,
             price,
-            city,
             address,
             appearances,
             microchipCode,
+            petType,
+            city,
             diseases);
 
         if (!result.IsSuccess)

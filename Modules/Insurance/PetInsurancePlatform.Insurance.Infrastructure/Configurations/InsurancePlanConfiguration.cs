@@ -19,7 +19,7 @@ internal class InsurancePlanConfiguration : IEntityTypeConfiguration<InsurancePl
            .ComplexProperty(p => p.Price);
 
         builder
-            .ComplexProperty(p => p.Coverages);
+            .OwnsMany(p => p.Coverages);
 
         builder
             .HasMany(p => p.Policies)

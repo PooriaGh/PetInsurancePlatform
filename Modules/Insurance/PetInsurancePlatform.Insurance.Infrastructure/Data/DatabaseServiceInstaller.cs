@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PetInsurancePlatform.Insurance.Application.Data;
 using System.Reflection;
 
 namespace PetInsurancePlatform.Insurance.Infrastructure.Data;
@@ -19,15 +20,19 @@ internal static class DatabaseInstaller
             throw new InvalidOperationException("[ConnectionStrings:Database] has null value.");
         }
 
-        services.AddDbContext<InuranceDbContext>(options =>
+        services.AddDbContext<InsuranceDbContext>(options =>
         {
-            options.UseNpgsql(configuration.GetConnectionString("Database"), builder =>
+            options
+            .UseNpgsql(configuration.GetConnectionString("Database"), builder =>
             {
                 builder
-                .MigrationsHistoryTable(HistoryRepository.DefaultTableName, InuranceDbContext.DB_SCHEMA)
+                .MigrationsHistoryTable(HistoryRepository.DefaultTableName, InsuranceDbContext.DB_SCHEMA)
                 .MigrationsAssembly(Assembly.GetExecutingAssembly().FullName);
-            });
+            })
+            .UseSnakeCaseNamingConvention();
         });
+
+        services.AddScoped<IInsuranceDbContext>(sp => sp.GetRequiredService<InsuranceDbContext>());
 
         services.AddDatabaseDeveloperPageExceptionFilter();
     }

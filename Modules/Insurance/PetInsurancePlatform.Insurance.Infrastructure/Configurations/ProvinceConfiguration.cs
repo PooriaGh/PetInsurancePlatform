@@ -17,7 +17,7 @@ internal class ProvinceConfiguration : IEntityTypeConfiguration<Province>
 
         builder
             .HasMany(p => p.Cities)
-            .WithOne()
+            .WithOne(c => c.Province)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

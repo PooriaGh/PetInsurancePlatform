@@ -26,7 +26,7 @@ public sealed class Address : ValueObject
 
     public string? Alley { get; private set; }
 
-    public string? PlateNumber { get; private set; }
+    public int PlateNumber { get; private set; }
 
     public long PostalCode { get; private set; }
 
@@ -34,7 +34,7 @@ public sealed class Address : ValueObject
         int district,
         string street,
         string? alley,
-        string? plateNumber,
+        int plateNumber,
         long postalCode)
     {
         if (district == 0)
@@ -72,7 +72,7 @@ public sealed class Address : ValueObject
         yield return District;
         yield return Street;
         yield return Alley ?? string.Empty;
-        yield return PlateNumber ?? string.Empty;
+        yield return PlateNumber;
         yield return PostalCode;
     }
 }

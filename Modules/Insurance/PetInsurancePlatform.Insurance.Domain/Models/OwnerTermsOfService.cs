@@ -11,11 +11,11 @@ public sealed class OwnerTermsOfService : Entity
     {
     }
 
+    public DateTime? AcceptedAt { get; private set; }
+
     public TermsOfService TermsOfService { get; private set; } = TermsOfService.None;
 
     public Owner Owner { get; private set; } = Owner.None;
-
-    public DateTime? AcceptedAt { get; private set; }
 
     internal static Result<OwnerTermsOfService> Create(
         TermsOfService termsOfService,
@@ -33,6 +33,7 @@ public sealed class OwnerTermsOfService : Entity
 
         return new OwnerTermsOfService
         {
+            AcceptedAt = DateTime.UtcNow,
             TermsOfService = termsOfService,
             Owner = owner,
         };

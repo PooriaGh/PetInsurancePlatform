@@ -17,14 +17,14 @@ public sealed class Disease : Entity
 
     public bool Accepted { get; private set; }
 
+    public DateTime CreatedAt { get; private set; }
+
+    public DateTime? UpdatedAt { get; private set; }
+
     private readonly List<PetTypeDisease> _petTypeDiseases = [];
     public IReadOnlyCollection<PetType> PetTypes => [.. _petTypeDiseases
         .OrderBy(atd => atd.CreatedAt)
         .Select(d => d.PetType)];
-
-    public DateTime CreatedAt { get; private set; }
-
-    public DateTime? UpdatedAt { get; private set; }
 
     public static Result<Disease> Create(
         string name,

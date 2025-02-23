@@ -2,8 +2,13 @@
 
 namespace PetInsurancePlatform.SharedKernel.Data;
 
-public class BaseDbContext : DbContext, IBaseDbContext
+public class BaseDbContext<TContext>
+    : DbContext, IBaseDbContext where TContext : DbContext
 {
+    protected BaseDbContext(DbContextOptions<TContext> options) : base(options)
+    {
+    }
+
     public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
     {
         var currentTransaction = Database.CurrentTransaction;

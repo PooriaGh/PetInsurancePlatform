@@ -16,10 +16,6 @@ internal class OwnerTermsOfServiceConfiguration : IEntityTypeConfiguration<Owner
             .ValueGeneratedNever();
 
         builder
-            .HasIndex(ot => new { ot.Owner, ot.TermsOfService })
-            .IsUnique();
-
-        builder
             .HasOne(ot => ot.Owner)
             .WithMany()
             .OnDelete(DeleteBehavior.Restrict);

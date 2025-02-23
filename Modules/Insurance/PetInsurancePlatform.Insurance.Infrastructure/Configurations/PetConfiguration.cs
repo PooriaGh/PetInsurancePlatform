@@ -19,10 +19,16 @@ internal class PetConfiguration : IEntityTypeConfiguration<Pet>
             .Ignore(p => p.HasDiseases);
 
         builder
+            .ComplexProperty(p => p.Address);
+
+        builder
+            .ComplexProperty(p => p.Price);
+
+        builder
             .ComplexProperty(p => p.Appearances);
 
         builder
-            .ComplexProperty(p => p.BirthCertificatesPages);
+            .OwnsMany(p => p.BirthCertificatesPages);
 
         builder
             .ComplexProperty(p => p.FrontView);
@@ -37,7 +43,20 @@ internal class PetConfiguration : IEntityTypeConfiguration<Pet>
             .ComplexProperty(p => p.LeftSideView);
 
         builder
+            .ComplexProperty(p => p.WalkingVideo);
+
+        builder
             .ComplexProperty(p => p.HealthCertificate);
+
+        builder
+           .HasOne(p => p.PetType)
+           .WithMany()
+           .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+           .HasOne(p => p.City)
+           .WithMany()
+           .OnDelete(DeleteBehavior.Restrict);
 
         builder
             .HasMany(p => p.Diseases)

@@ -16,7 +16,7 @@ internal class OwnerConfiguration : IEntityTypeConfiguration<Owner>
             .ValueGeneratedNever();
 
         builder
-           .Ignore(o => o.Id);
+           .Ignore(o => o.FullName);
 
         builder
            .HasMany(o => o.Pets)
