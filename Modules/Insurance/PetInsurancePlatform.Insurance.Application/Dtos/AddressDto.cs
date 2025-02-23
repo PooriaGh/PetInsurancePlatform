@@ -10,7 +10,7 @@ public sealed class AddressDto
 
     public string Alley { get; set; } = string.Empty;
 
-    public string PlateNumber { get; set; } = string.Empty;
+    public int PlateNumber { get; set; }
 
     public long PostalCode { get; set; }
 }

@@ -4,7 +4,7 @@ using PetInsurancePlatform.SharedKernel.Extensions;
 
 namespace PetInsurancePlatform.Insurance.Endpoints.InsurancePlans.AddPet;
 
-internal sealed class AddPetEndpoint : Endpoint<AddPetRequest, Guid>
+public sealed class AddPetEndpoint : Endpoint<AddPetRequest, Guid>
 {
     public override void Configure()
     {

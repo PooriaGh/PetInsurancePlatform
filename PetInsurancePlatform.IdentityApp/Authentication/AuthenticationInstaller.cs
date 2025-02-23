@@ -34,4 +34,9 @@ internal static class AuthenticationInstaller
                 options.Scope.Add("profile");
             });
     }
+
+    public static void AddAuthenticationSeeder(this IServiceCollection services)
+    {
+        services.AddHostedService<OpenIddictSeeder>();
+    }
 }

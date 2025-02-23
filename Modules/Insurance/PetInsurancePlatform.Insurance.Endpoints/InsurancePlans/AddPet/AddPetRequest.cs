@@ -2,7 +2,7 @@
 
 namespace PetInsurancePlatform.Insurance.Endpoints.InsurancePlans.AddPet;
 
-internal sealed class AddPetRequest
+public sealed class AddPetRequest
 {
     public Guid InsurancePlanId { get; set; }
 

@@ -18,10 +18,14 @@ builder.Services.AddQueue();
 builder.Services.AddDefaultCorsPolicy();
 
 builder.Services.AddGoogleAuthentication();
+builder.Services.AddAuthenticationSeeder();
 
 builder.Services.AddDefaultHealthChecks();
 
-builder.Services.AddOpenTelemetryMonitoring(Assembly.GetExecutingAssembly());
+if (builder.Environment.IsProduction())
+{
+    builder.Services.AddOpenTelemetryMonitoring(Assembly.GetExecutingAssembly());
+}
 
 builder.Services.AddRazorPages();
 
@@ -31,6 +35,10 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
     app.UseHsts();
+}
+else
+{
+    app.ApplyInsuranceDatabaseMigrations();
 }
 
 app.UseHttpsRedirection();
