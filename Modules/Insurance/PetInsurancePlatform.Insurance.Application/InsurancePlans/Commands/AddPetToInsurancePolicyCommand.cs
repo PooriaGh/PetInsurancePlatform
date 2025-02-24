@@ -7,13 +7,14 @@ using PetInsurancePlatform.Insurance.Application.Data;
 using PetInsurancePlatform.Insurance.Application.Dtos;
 using PetInsurancePlatform.Insurance.Domain.Errors;
 using PetInsurancePlatform.Insurance.Domain.ValueObjects;
+using PetInsurancePlatform.SharedKernel.Messaging;
 
 namespace PetInsurancePlatform.Insurance.Application.InsurancePlans.Commands;
 
 public sealed class AddPetToInsurancePolicyCommand(
     Guid insurancePlanId,
     Guid insurancePolicyId,
-    PetRequestDto request) : ICommand<Result>
+    PetRequestDto request) : ICommandWithResult
 {
     public Guid InsurancePlanId { get; set; } = insurancePlanId;
 
@@ -21,7 +22,7 @@ public sealed class AddPetToInsurancePolicyCommand(
 
     public PetRequestDto Request { get; set; } = request;
 
-    internal sealed class RequestValidator : Validator<AddPetToInsurancePolicyCommand>
+    public sealed class RequestValidator : Validator<AddPetToInsurancePolicyCommand>
     {
         public RequestValidator()
         {
@@ -68,7 +69,7 @@ public sealed class AddPetToInsurancePolicyCommand(
 
     public class AddPetCommandHandler(
         IInsuranceDbContext dbContext,
-        ILogger<AddPetCommandHandler> logger) : ICommandHandler<AddPetToInsurancePolicyCommand, Result>
+        ILogger<AddPetCommandHandler> logger) : ICommandWithResultHandler<AddPetToInsurancePolicyCommand>
     {
         public async Task<Result> ExecuteAsync(AddPetToInsurancePolicyCommand command, CancellationToken ct)
         {

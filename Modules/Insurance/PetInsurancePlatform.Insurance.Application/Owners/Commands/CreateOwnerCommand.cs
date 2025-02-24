@@ -6,10 +6,11 @@ using PetInsurancePlatform.Insurance.Application.Data;
 using PetInsurancePlatform.Insurance.Application.Dtos;
 using PetInsurancePlatform.Insurance.Domain.Errors;
 using PetInsurancePlatform.Insurance.Domain.Models;
+using PetInsurancePlatform.SharedKernel.Messaging;
 
 namespace PetInsurancePlatform.Insurance.Application.Owners.Commands;
 
-public sealed class CreateOwnerCommand(OwnerRequestDto ownerRequest) : ICommand<Result>
+public sealed class CreateOwnerCommand(OwnerRequestDto ownerRequest) : ICommandWithResult
 {
     public OwnerRequestDto OwnerRequest { get; set; } = ownerRequest;
 
@@ -36,7 +37,7 @@ public sealed class CreateOwnerCommand(OwnerRequestDto ownerRequest) : ICommand<
 
     public class AddOwnerCommandHandler(
         IInsuranceDbContext dbContext,
-        ILogger<AddOwnerCommandHandler> logger) : ICommandHandler<CreateOwnerCommand, Result>
+        ILogger<AddOwnerCommandHandler> logger) : ICommandWithResultHandler<CreateOwnerCommand>
     {
         public async Task<Result> ExecuteAsync(CreateOwnerCommand command, CancellationToken ct)
         {

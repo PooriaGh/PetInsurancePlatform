@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddFastEndpoints(options =>
     {
-        options.SourceGeneratorDiscoveredTypes.AddRange(InsuranceEndpoints.Assembly.ExportedTypes);
+        options.Assemblies = [.. InsuranceEndpoints.Assemblies];
     })
     .AddAuthorization()
     .SwaggerDocument();
