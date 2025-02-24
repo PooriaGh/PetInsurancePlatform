@@ -17,7 +17,7 @@ internal static class DatabaseInstaller
 
         if (string.IsNullOrWhiteSpace(connectionString))
         {
-            throw new InvalidOperationException("[ConnectionStrings:Database] has null value.");
+            return;
         }
 
         services.AddDbContext<InsuranceDbContext>(options =>

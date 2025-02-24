@@ -3,13 +3,12 @@ using FastEndpoints.Testing;
 using PetInsurancePlatform.Insurance.Application.Dtos;
 using PetInsurancePlatform.Insurance.Domain.Enums;
 using PetInsurancePlatform.Insurance.Endpoints.InsurancePlans.AddPet;
-using PetInsurancePlatform.Insurance.Tests.Abstractions;
 using Shouldly;
 using System.Net;
 
 namespace PetInsurancePlatform.Insurance.Tests.InsurancePlans.AddPet;
 
-public class Tests(TestApp App) : TestBase<TestApp>
+public class Tests(Sut App) : TestBase<Sut>
 {
     [Fact, Priority(1)]
     public async Task Invalid_Pet_Request_Input()
